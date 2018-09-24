@@ -14,3 +14,12 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/api/impact','RisksImpactController@index');
+Route::get('/api/impact','RisksImpactController@index');
+
+Route::post('/api/frecuency','RisksFrecuencyController@index');
+Route::get('/api/frecuency','RisksFrecuencyController@index');
+
+
+Route::post('/api/impact/r','RisksImpactController@register');
