@@ -21,4 +21,18 @@ class RisksFrecuencyController extends Controller
                 'status'=>'success'
                 ), 200);
     }   
+
+    public function show($id){
+        $frecuency = RisksFrecuency::find($id);
+        if($frecuency != null){
+            return response()->json(array(
+                    'frecuency'=> $frecuency,
+                    'status'=>'success'
+                    ), 200);
+        }else{
+            return response()->json(array(
+                    'status'=>'error'
+                    ), 200);
+        }    
+    }
 }

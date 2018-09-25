@@ -37,6 +37,8 @@ class Risks extends Model
      */
     protected $primaryKey = 'ID';
 
+    public $timestamps = false;
+
     /**
      * @var array
      */

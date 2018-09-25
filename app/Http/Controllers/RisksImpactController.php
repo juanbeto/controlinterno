@@ -18,8 +18,17 @@ class RisksImpactController extends Controller
 				), 200);
 	}
     //
-    public function register(Request $request){
-    	$json = $request->input('json', null);
-    	$param = json_decode($json);
+    public function show($id){
+    	$impact = RisksImpact::find($id);
+    	if($impact != null){
+	    	return response()->json(array(
+					'impact'=> $impact,
+					'status'=>'success'
+					), 200);
+    	}else{
+    		return response()->json(array(
+					'status'=>'error'
+					), 200);
+    	}    
     }
 }
