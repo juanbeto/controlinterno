@@ -46,8 +46,9 @@ class RisksController extends Controller
         //
         $risks = new Risks();
         $request->merge($param_array);
-        try{
-                $validatedData = $this->validate($request, [ 
+        
+
+        $validatedData = \Validator:make($param_array, [ 
                     'code' => 'required',
                     'id_process' => 'required',
                     'id_period' => 'required',
@@ -56,13 +57,15 @@ class RisksController extends Controller
                     'effects' => 'required',
                     'causes' => 'required',
                     'classification' => 'required',
+                    'object' => 'required',
                     'factor' => 'required',
                     'factorvulnerability' => 'required',
                     'probability' => 'required'
-                ]);
-            }catch(\Illuminate\Validation\ValidationException $e){
-                return $e->getResponse();
-            }     
+        ]);        
+
+        if($validatedData->fails()){
+            return response()->json($validatedData->errors(), 400);
+        }
 
             $risks->code = $param->code;
             $risks->id_process = $param->id_process;
