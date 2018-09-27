@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facedes\DB;
-use App\Risks;
+use App\RisksAction;
 use Illuminate\Http\Request;
 
-class RisksController extends Controller
+class RisksActionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,14 +14,24 @@ class RisksController extends Controller
      */
     public function index()
     {
-        $risks = Risks::all();
+        $risks_actions = RisksAction::All();
         return response()->json(array(
-                'risks'=> $risks,
+                'risks_actions'=> $risks_actions,
                 'status'=>'success'
                 ), 200);
     }
 
-    /**
+    public function indexRisks($id_risks)
+    {
+
+        $risks_actions = RisksAction::where('id_risks', $id_risks)->get();
+        return response()->json(array(
+                'risks_actions'=> $risks_actions,
+                'status'=>'success'
+                ), 200);
+    }
+
+/**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -44,44 +54,27 @@ class RisksController extends Controller
         $param = json_decode($json);
         $param_array = json_decode($json, true);
         //
-        $risks = new Risks();
+        $action = new RisksAction();
         $request->merge($param_array);
         $validatedData = \Validator::make($param_array, [ 
-                    'code' => 'required',
-                    'id_process' => 'required',
-                    'id_period' => 'required',
+                    'id_risks' => 'required',                    
                     'name' => 'required|min:5',
-                    'description' => 'required',
-                    'effects' => 'required',
-                    'causes' => 'required',
-                    'classification' => 'required',
-                    //'object' => 'required',
-                    'factor' => 'required',
-                    'factorvulnerability' => 'required',
-                    'probability' => 'required',
+                    'owner' => 'required',
+                    'indicator' => 'required'
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
 
-            $risks->code = $param->code;
-            $risks->id_process = $param->id_process;
-            $risks->id_period = $param->id_period;
-            $risks->name = $param->name;
-            $risks->description = $param->description;
-            $risks->effects = $param->effects;
-            $risks->causes = $param->causes;
-            $risks->classification = $param->classification;
-            $risks->object = $param->object;
-            $risks->factor = $param->factor;
-            $risks->factorvulnerability = $param->factorvulnerability;
-            $risks->probability = $param->probability;
-            $risks->createdate = date("Y-m-d H:i:s");
-            $risks->save();
+            $action->id_risks = $param->id_risks;
+            $action->name = $param->name;
+            $action->owner = $param->owner;
+            $action->indicator = $param->indicator;            
+            $action->save();
 
             $data = array(
-                'risk' => $risks,
+                'action' => $action,
                 'status' => 'success',
                 'code' => 200
             );
@@ -92,15 +85,15 @@ class RisksController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Risks  $risks
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $risks = Risks::find($id);
+        $action = RisksAction::find($id);
         if($risks != null){
                 return response()->json(array(
-                        'risks'=> $risks,
+                        'action'=> $action,
                         'status'=>'success'
                         ), 200);
         }else{
@@ -124,8 +117,8 @@ class RisksController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Risks  $risks
+     * @param  int $id
+     * @param  \App\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function update($id, Request $request)
@@ -137,28 +130,20 @@ class RisksController extends Controller
         //$request->merge($param_array);
         //var_dump($param_array);
         $validatedData = \Validator::make($param_array, [ 
-                    'code' => 'required',
-                    'id_process' => 'required',
-                    'id_period' => 'required',
+                    'id_risks' => 'required',                    
                     'name' => 'required|min:5',
-                    'description' => 'required',
-                    'effects' => 'required',
-                    'causes' => 'required',
-                    'classification' => 'required',
-                    //'object' => 'required',
-                    'factor' => 'required',
-                    'factorvulnerability' => 'required',
-                    'probability' => 'required',
+                    'owner' => 'required',
+                    'indicator' => 'required'
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
 
-        $risk = Risks::where('id', $id)->update($param_array);
+        $action = RisksAction::where('id', $id)->update($param_array);
 
         $data = array(
-                'risk' => $param,
+                'action' => $param,
                 'status' => 'success',
                 'code' => 200
             );
@@ -168,16 +153,16 @@ class RisksController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  \App\Risks  $risks
+     * @param  int $id
+     * @param  \App\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function destroy($id, Request $request)
     {
-        $risk = Risks::find($id);
-        $risk->delete();
+        $action = RisksAction::find($id);
+        $action->delete();
         $data = array(
-                'risk' => $risk,
+                'action' => $action,
                 'status' => 'success',
                 'code' => 200
             );
