@@ -20,7 +20,10 @@ class RisksActionController extends Controller
                 'status'=>'success'
                 ), 200);
     }
-
+    
+    /**
+    * Show the lists of actions associated to risks
+    */
     public function indexRisks($id_risks)
     {
 
@@ -91,7 +94,7 @@ class RisksActionController extends Controller
     public function show($id)
     {
         $action = RisksAction::find($id);
-        if($risks != null){
+        if($action != null){
                 return response()->json(array(
                         'action'=> $action,
                         'status'=>'success'

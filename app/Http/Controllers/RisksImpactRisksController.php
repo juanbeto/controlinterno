@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\RisksPolitics;
+use App\RisksImpactRisks;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class RisksPoliticsController extends Controller
+class RisksImpactRisksController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,27 +15,29 @@ class RisksPoliticsController extends Controller
      */
     public function index()
     {
-        $risks_politics = RisksPolitics::all();
+        $impact_risks = RisksImpactRisks::all();
         return response()->json(array(
-                'risks_politics'=> $risks_politics,
+                'impact_risks'=> $impact_risks,
                 'status'=>'success'
                 ), 200);
     }
 
     
     /**
-    * Show the lists of actions associated to risks
+    * Show the lists of impacts associated to risks
+    * @param int $id_risks
     */
     public function indexRisks($id_risks)
     {
 
-        $risks_politics = RisksPolitics::where('id_risks', $id_risks)->get();
+        $impact_risks = RisksImpactRisks::where('id_risks', $id_risks)->get();
         return response()->json(array(
-                'risks_politics'=> $risks_politics,
+                'impact_risks'=> $impact_risks,
                 'status'=>'success'
                 ), 200);
     }
 
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -58,23 +61,25 @@ class RisksPoliticsController extends Controller
         $param = json_decode($json);
         $param_array = json_decode($json, true);
         //
-        $risksPolitic = new RisksPolitics();
+        $impact_risks = new RisksImpactRisks();
         $request->merge($param_array);
         $validatedData = \Validator::make($param_array, [ 
                     'id_risks' => 'required',
-                    'description' => 'required|min:5',                    
+                    'id_impact' => 'required',
+                    'name' => 'required|min:5'                    
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
 
-            $risksPolitic->id_risks = $param->id_risks;
-            $risksPolitic->description = $param->description;
-            $risksPolitic->save();
+            $impact_risks->id_risks = $param->id_risks;
+            $impact_risks->id_impact = $param->id_impact;
+            $impact_risks->name = $param->name;
+            $impact_risks->save();
 
             $data = array(
-                'risksPolitic' => $risksPolitic,
+                'impact_risks' => $impact_risks,
                 'status' => 'success',
                 'code' => 200
             );
@@ -85,15 +90,15 @@ class RisksPoliticsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\RisksPolitics  $risksPolitics
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $risks_politic = RisksPolitics::find($id);
-        if($risks_politic != null){
+        $impact_risks = RisksImpactRisks::find($id);
+        if($impact_risks != null){
                 return response()->json(array(
-                        'risks_politic'=> $risks_politic,
+                        'impact_risks'=> $impact_risks,
                         'status'=>'success'
                         ), 200);
         }else{
@@ -106,10 +111,10 @@ class RisksPoliticsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\RisksPolitics  $risksPolitics
+     * @param  \App\RisksImpactRisks  $risksImpactRisks
      * @return \Illuminate\Http\Response
      */
-    public function edit(RisksPolitics $risksPolitics)
+    public function edit(RisksImpactRisks $risksImpactRisks)
     {
         //
     }
@@ -117,8 +122,8 @@ class RisksPoliticsController extends Controller
     /**
      * Update the specified resource in storage.
      *
+     * @param int $id
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\RisksPolitics  $risksPolitics
      * @return \Illuminate\Http\Response
      */
     public function update($id, Request $request)
@@ -128,17 +133,18 @@ class RisksPoliticsController extends Controller
         $param_array = json_decode($json, true);//Convierte en array
         $validatedData = \Validator::make($param_array, [ 
                     'id_risks' => 'required',
-                    'description' => 'required|min:5',                    
+                    'id_impact' => 'required',
+                    'name' => 'required|min:5'                 
         ]);            
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
 
-        $risks_politic = RisksPolitics::where('id', $id)->update($param_array);
+        $impact_risks = RisksImpactRisks::where('id', $id)->update($param_array);
 
         $data = array(
-                'risks_politic' => $param,
+                'impact_risks' => $param,
                 'status' => 'success',
                 'code' => 200
             );
@@ -150,15 +156,16 @@ class RisksPoliticsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\RisksPolitics  $risksPolitics
+     * @param int $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function destroy($id, Request $request)
     {
-        $risks_politic = RisksPolitics::find($id);
-        $risks_politic->delete();
+        $impact_risks = RisksImpactRisks::find($id);
+        $impact_risks->delete();
         $data = array(
-                'risks_politic' => $risks_politic,
+                'impact_risks' => $impact_risks,
                 'status' => 'success',
                 'code' => 200
             );

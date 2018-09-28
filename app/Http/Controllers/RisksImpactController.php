@@ -10,7 +10,7 @@ use App\RisksImpact;
 
 class RisksImpactController extends Controller
 {
-	public function index(Request $request){
+	public function index(){
 		$impacts = RisksImpact::all();
 		return response()->json(array(
 				'impacts'=> $impacts,
