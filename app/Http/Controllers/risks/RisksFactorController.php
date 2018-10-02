@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
-use Illuminate\Support\Facedes\DB;
-use App\Risks;
-use Illuminate\Http\Request;
+namespace App\Http\Controllers\risks;
 
-class RisksController extends Controller
+use App\RisksFactor;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class RisksFactorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +15,10 @@ class RisksController extends Controller
      */
     public function index()
     {
-        $risks = Risks::all();
+        
+        $factors = RiskFactor::all()->load('RisksFactorType');
         return response()->json(array(
-                'risks'=> $risks,
+                'factors'=> $factors,
                 'status'=>'success'
                 ), 200);
     }
@@ -44,44 +46,27 @@ class RisksController extends Controller
         $param = json_decode($json);
         $param_array = json_decode($json, true);
         //
-        $risks = new Risks();
+        $factor = new RiskFactor();
         $request->merge($param_array);
         $validatedData = \Validator::make($param_array, [ 
-                    'code' => 'required',
-                    'id_process' => 'required',
-                    'id_period' => 'required',
-                    'name' => 'required|min:5',
+                    'name' => 'required',
+                    'id_factor_type' => 'required',
                     'description' => 'required',
-                    'effects' => 'required',
-                    'causes' => 'required',
-                    'classification' => 'required',
-                    //'object' => 'required',
-                    'factor' => 'required',
-                    'factorvulnerability' => 'required',
-                    'probability' => 'required',
+                    'definition' => 'required'
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
 
-            $risks->code = $param->code;
-            $risks->id_process = $param->id_process;
-            $risks->id_period = $param->id_period;
-            $risks->name = $param->name;
-            $risks->description = $param->description;
-            $risks->effects = $param->effects;
-            $risks->causes = $param->causes;
-            $risks->classification = $param->classification;
-            $risks->object = $param->object;
-            $risks->factor = $param->factor;
-            $risks->factorvulnerability = $param->factorvulnerability;
-            $risks->probability = $param->probability;
-            $risks->createdate = date("Y-m-d H:i:s");
-            $risks->save();
+            $factor->name = $param->name;
+            $factor->id_factor_type = $param->id_factor_type;
+            $factor->description = $param->description;            
+            $factor->definition = $param->definition;          
+            $factor->save();
 
             $data = array(
-                'risk' => $risks,
+                'factor' => $factor,
                 'status' => 'success',
                 'code' => 200
             );
@@ -92,15 +77,15 @@ class RisksController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Risks  $risks
+     * @param  \App\RisksFactor  $risksFactor
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $risks = Risks::find($id);
-        if($risks != null){
+        $factor = RiskFactor::find($id);
+        if($risfactorks != null){
                 return response()->json(array(
-                        'risks'=> $risks,
+                        'factor'=> $factor,
                         'status'=>'success'
                         ), 200);
         }else{
@@ -113,10 +98,10 @@ class RisksController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Risks  $risks
+     * @param  \App\RisksFactor  $risksFactor
      * @return \Illuminate\Http\Response
      */
-    public function edit(Risks $risks)
+    public function edit(RisksFactor $risksFactor)
     {
         //
     }
@@ -125,7 +110,7 @@ class RisksController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Risks  $risks
+     * @param  \App\RisksFactor  $risksFactor
      * @return \Illuminate\Http\Response
      */
     public function update($id, Request $request)
@@ -137,28 +122,20 @@ class RisksController extends Controller
         //$request->merge($param_array);
         //var_dump($param_array);
         $validatedData = \Validator::make($param_array, [ 
-                    'code' => 'required',
-                    'id_process' => 'required',
-                    'id_period' => 'required',
-                    'name' => 'required|min:5',
+                    'name' => 'required',
+                    'id_factor_type' => 'required',
                     'description' => 'required',
-                    'effects' => 'required',
-                    'causes' => 'required',
-                    'classification' => 'required',
-                    //'object' => 'required',
-                    'factor' => 'required',
-                    'factorvulnerability' => 'required',
-                    'probability' => 'required',
+                    'definition' => 'required'
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
 
-        $risk = Risks::where('id', $id)->update($param_array);
+        $factor = RiskFactor::where('id', $id)->update($param_array);
 
         $data = array(
-                'risk' => $param,
+                'factor' => $param,
                 'status' => 'success',
                 'code' => 200
             );
@@ -169,15 +146,15 @@ class RisksController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Risks  $risks
+     * @param  \App\RisksFactor  $risksFactor
      * @return \Illuminate\Http\Response
      */
     public function destroy($id, Request $request)
     {
-        $risk = Risks::find($id);
-        $risk->delete();
+        $factor = RiskFactor::find($id);
+        $factor->delete();
         $data = array(
-                'risk' => $risk,
+                'factor' => $factor,
                 'status' => 'success',
                 'code' => 200
             );

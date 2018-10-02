@@ -27,10 +27,10 @@ Route::post('/api/risks/factortype','RisksFactorTypeController@index');
 Route::get('/api/risks/factortype','RisksFactorTypeController@index');
 Route::get('/api/risks/factortype/{id}','RisksFactorTypeController@show');
 
-Route::resource('/api/risks/risks','RisksController');
+Route::resource('/api/risks/risks','risks\RisksController');
 
-Route::resource('/api/risks/actions','RisksActionController');
-Route::get('/api/risks/actions/{id_risks}/risk','RisksActionController@indexRisks');
+Route::resource('/api/risks/actions','risks\RisksActionController');
+Route::get('/api/risks/actions/{id_risks}/risk','risks\RisksActionController@indexRisks');
 
 Route::resource('/api/risks/causeseffects','RisksCauseseffectsController');
 Route::get('/api/risks/causeseffects/{id_risks}/risk','RisksCauseseffectsController@indexRisks');
@@ -48,6 +48,10 @@ Route::get('/api/risks/type/{id}','RisksTypeController@show');
 Route::post('/api/risks/controltype','RisksControlTypeController@index');
 Route::get('/api/risks/controltype','RisksControlTypeController@index');
 Route::get('/api/risks/controltype/{id}','RisksControlTypeController@show');
+
+
+Route::resource('/api/risks/factors','risks\RisksFactorController');
+
 
 Route::get('/clear-cache', function(){
 	$code = Artisan::call('clear:cache');
