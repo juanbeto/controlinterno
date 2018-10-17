@@ -73,6 +73,7 @@ abstract class AbstractSchemaManager
     {
         $this->_conn     = $conn;
         $this->_platform = $platform ?: $this->_conn->getDatabasePlatform();
+        $this->_platform->registerDoctrineTypeMapping('enum', 'string');
     }
 
     /**

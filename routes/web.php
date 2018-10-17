@@ -52,6 +52,9 @@ Route::get('/api/risks/controltype/{id}','RisksControlTypeController@show');
 
 Route::resource('/api/risks/factors','risks\RisksFactorController');
 
+Route::post('/api/audit/areas','audit\AuditAreasController@index');
+Route::get('/api/audit/areas','audit\AuditAreasController@index');
+Route::get('/api/audit/areas/{id}','audit\AuditAreasController@show');
 
 Route::get('/clear-cache', function(){
 	$code = Artisan::call('clear:cache');
