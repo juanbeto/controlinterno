@@ -6,18 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $ID
- * @property int $ID_PLANNING
+ * @property int $ID_ACTIVITIE
  * @property int $ID_USER
- * @property AuditPlanning $auditPlanning
+ * @property AuditActivity $auditActivity
  */
-class AuditAuditorsPlanning extends Model
+class AuditAuditorsActivities extends Model
 {
     /**
      * The table associated with the model.
      * 
      * @var string
      */
-    protected $table = 'AUDIT_AUDITORS_PLANNING';
+    protected $table = 'AUDIT_AUDITORS_ACTIVITIES';
 
     /**
      * The primary key for the model.
@@ -29,13 +29,13 @@ class AuditAuditorsPlanning extends Model
     /**
      * @var array
      */
-    protected $fillable = ['ID_PLANNING', 'ID_USER'];
+    protected $fillable = ['ID_ACTIVITIE', 'ID_USER'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function auditPlanning()
+    public function auditActivity()
     {
-        return $this->belongsTo('App\AuditPlanning', 'ID_PLANNING', 'ID');
+        return $this->belongsTo('App\AuditActivity', 'ID_ACTIVITIE', 'ID');
     }
 }

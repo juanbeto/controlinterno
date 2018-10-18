@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $ID
+ * @property int $ID_AUDIT
  * @property int $ID_AREA
  * @property string $CYCLE
  * @property string $QUESTION
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $UPDATED_AT
  * @property int $CREATED_BY
  * @property int $UPDATED_BY
+ * @property Audit $audit
  * @property AuditArea $auditArea
  */
 class AuditPlanning extends Model
@@ -39,7 +41,15 @@ class AuditPlanning extends Model
     /**
      * @var array
      */
-    protected $fillable = ['ID_AREA', 'CYCLE', 'QUESTION', 'NUMERALS', 'RECORDS', 'OBSERVATION', 'ACCORDANCE', 'ACTION', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY'];
+    protected $fillable = ['ID_AUDIT', 'ID_AREA', 'CYCLE', 'QUESTION', 'NUMERALS', 'RECORDS', 'OBSERVATION', 'ACCORDANCE', 'ACTION', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY'];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function audit()
+    {
+        return $this->belongsTo('App\Audit', 'ID_AUDIT', 'ID');
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

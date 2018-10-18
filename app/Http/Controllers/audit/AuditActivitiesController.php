@@ -15,7 +15,25 @@ class AuditActivitiesController extends Controller
      */
     public function index()
     {
-        //
+        $activities = AuditActivities::all();
+        return response()->json(array(
+                'activities'=> $activities,
+                'status'=>'success'
+                ), 200);
+    }
+
+    
+    /**
+    * Show the lists of activities associated to Audit
+    */
+    public function indexAudit($id_audit)
+    {
+
+        $activities = AuditActivities::where('id_audit', $id_audit)->get();
+        return response()->json(array(
+                'activities'=> $activities,
+                'status'=>'success'
+                ), 200);
     }
 
     /**
@@ -36,7 +54,44 @@ class AuditActivitiesController extends Controller
      */
     public function store(Request $request)
     {
+        //Recoger datos post
+        $json =  $request->input('json', null);
+        $param = json_decode($json);
+        $param_array = json_decode($json, true);
         //
+        $activitie = new AuditActivities();
+        $request->merge($param_array);
+        $validatedData = \Validator::make($param_array, [ 
+                    'id_audit' => 'required',
+                    'begin' => 'required',
+                    'end' => 'required',
+                    'name' => 'required|min:5',
+                    'numerals_iso' => 'required',
+                    'numerals_meci' => 'required',
+                    'id_user_auditor' => 'required',
+                    'classification' => 'required'
+        ]);        
+
+        if($validatedData->fails()){
+            return response()->json($validatedData->errors(), 400);
+        }
+            $activitie->id_audit = $param->id_audit;
+            $activitie->begin = $param->begin;
+            $activitie->end = $param->end;
+            $activitie->name = $param->name;
+            $activitie->numerals_iso = $param->numerals_iso;
+            $activitie->numerals_meci = $param->numerals_meci;
+            $activitie->id_user_auditor = $param->id_user_auditor;
+            $activitie->classification = $param->classification;
+            $activitie->save();
+
+            $data = array(
+                'activitie' => $activitie,
+                'status' => 'success',
+                'code' => 200
+            );
+
+            return response()->json($data, 200);
     }
 
     /**
@@ -45,9 +100,19 @@ class AuditActivitiesController extends Controller
      * @param  \App\AuditActivities  $auditActivities
      * @return \Illuminate\Http\Response
      */
-    public function show(AuditActivities $auditActivities)
+    public function show($id)
     {
-        //
+        $activitie = AuditActivities::find($id);
+        if($activitie != null){
+                return response()->json(array(
+                        'activitie'=> $activitie,
+                        'status'=>'success'
+                        ), 200);
+        }else{
+            return response()->json(array(
+                        'status'=>'error'
+                        ), 200);
+        }    
     }
 
     /**
@@ -68,9 +133,38 @@ class AuditActivitiesController extends Controller
      * @param  \App\AuditActivities  $auditActivities
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AuditActivities $auditActivities)
+    public function update($id, Request $request)
     {
-        //
+        $json =  $request->input('json', null);
+        
+        $param = json_decode($json);
+        $param_array = json_decode($json, true);//Convierte en array
+        //$request->merge($param_array);
+        //var_dump($param_array);
+        $validatedData = \Validator::make($param_array, [ 
+                    'id_audit' => 'required',
+                    'begin' => 'required',
+                    'end' => 'required',
+                    'name' => 'required|min:5',
+                    'numerals_iso' => 'required',
+                    'numerals_meci' => 'required',
+                    'id_user_auditor' => 'required',
+                    'classification' => 'required'
+        ]);        
+
+        if($validatedData->fails()){
+            return response()->json($validatedData->errors(), 400);
+        }
+
+        $activitie = AuditActivities::where('id', $id)->update($param_array);
+
+        $data = array(
+                'activitie' => $param,
+                'status' => 'success',
+                'code' => 200
+            );
+
+        return response()->json($data, 200);
     }
 
     /**
@@ -79,8 +173,16 @@ class AuditActivitiesController extends Controller
      * @param  \App\AuditActivities  $auditActivities
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AuditActivities $auditActivities)
+    public function destroy($id, Request $request)
     {
-        //
+        $activitie = AuditActivities::find($id);
+        $activitie->delete();
+        $data = array(
+                'activitie' => $activitie,
+                'status' => 'success',
+                'code' => 200
+            );
+
+        return response()->json($data, 200);
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $ID
+ * @property int $ID_AUDIT
  * @property string $BEGIN
  * @property string $END
  * @property string $NAME
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $UPDATED_AT
  * @property int $CREATED_BY
  * @property int $UPDATED_BY
+ * @property Audit $audit
  */
 class AuditActivities extends Model
 {
@@ -36,6 +38,13 @@ class AuditActivities extends Model
     /**
      * @var array
      */
-    protected $fillable = ['BEGIN', 'END', 'NAME', 'NUMERALS_ISO', 'NUMERALS_MECI', 'ID_USER_AUDITOR', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY'];
+    protected $fillable = ['ID_AUDIT', 'BEGIN', 'END', 'NAME', 'NUMERALS_ISO', 'NUMERALS_MECI', 'ID_USER_AUDITOR', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function audit()
+    {
+        return $this->belongsTo('App\Audit', 'ID_AUDIT', 'ID');
+    }
 }

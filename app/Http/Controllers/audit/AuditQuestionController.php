@@ -15,7 +15,11 @@ class AuditQuestionController extends Controller
      */
     public function index()
     {
-        //
+        $questions = AuditQuestion::All();
+        return response()->json(array(
+                'questions'=> $questions,
+                'status'=>'success'
+                ), 200);
     }
 
     /**
@@ -36,7 +40,30 @@ class AuditQuestionController extends Controller
      */
     public function store(Request $request)
     {
+        //Recoger datos post
+        $json =  $request->input('json', null);
+        $param = json_decode($json);
+        $param_array = json_decode($json, true);
         //
+        $question = new AuditQuestion();
+        $request->merge($param_array);
+        $validatedData = \Validator::make($param_array, [ 
+                    'name' => 'required|min:5'
+        ]);        
+
+        if($validatedData->fails()){
+            return response()->json($validatedData->errors(), 400);
+        }
+            $question->name = $param->name;
+            $question->save();
+
+            $data = array(
+                'question' => $question,
+                'status' => 'success',
+                'code' => 200
+            );
+
+            return response()->json($data, 200);
     }
 
     /**
@@ -45,9 +72,19 @@ class AuditQuestionController extends Controller
      * @param  \App\AuditQuestion  $auditQuestion
      * @return \Illuminate\Http\Response
      */
-    public function show(AuditQuestion $auditQuestion)
+    public function show($id)
     {
-        //
+        $question = AuditQuestion::find($id);
+        if($question != null){
+                return response()->json(array(
+                        'question'=> $question,
+                        'status'=>'success'
+                        ), 200);
+        }else{
+            return response()->json(array(
+                        'status'=>'error'
+                        ), 200);
+        }
     }
 
     /**
@@ -68,9 +105,29 @@ class AuditQuestionController extends Controller
      * @param  \App\AuditQuestion  $auditQuestion
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AuditQuestion $auditQuestion)
+    public function update($id, Request $request)
     {
-        //
+        $json =  $request->input('json', null);
+        
+        $param = json_decode($json);
+        $param_array = json_decode($json, true);//Convierte en array
+        $validatedData = \Validator::make($param_array, [ 
+                    'name' => 'required|min:5'
+        ]);        
+
+        if($validatedData->fails()){
+            return response()->json($validatedData->errors(), 400);
+        }
+
+        $question = AuditQuestion::where('id', $id)->update($param_array);
+
+        $data = array(
+                'question' => $param,
+                'status' => 'success',
+                'code' => 200
+            );
+
+        return response()->json($data, 200);
     }
 
     /**
@@ -79,8 +136,16 @@ class AuditQuestionController extends Controller
      * @param  \App\AuditQuestion  $auditQuestion
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AuditQuestion $auditQuestion)
+    public function destroy($id, Request $request)
     {
-        //
+        $question = AuditQuestion::find($id);
+        $question->delete();
+        $data = array(
+                'question' => $question,
+                'status' => 'success',
+                'code' => 200
+            );
+
+        return response()->json($data, 200);
     }
 }

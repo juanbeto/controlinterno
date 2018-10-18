@@ -2,22 +2,31 @@
 
 namespace App\Http\Controllers\audit;
 
-use App\AuditProgram;
+use App\AuditAuditorsActivities;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class AuditProgramController extends Controller
+class AuditAuditorsActivitiesController extends Controller
 {
-    /**
+        /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $programs = AuditProgram::All();
+        //
+    }
+
+    /**
+    * Show the lists of auditors associated to Audit
+    */
+    public function indexActivitie($id_activities)
+    {
+
+        $planning = AuditAuditorsActivities::where('id_activities', $id_activities)->get();
         return response()->json(array(
-                'programs'=> $programs,
+                'auditors_activities'=> $auditor_activitie,
                 'status'=>'success'
                 ), 200);
     }
@@ -45,38 +54,22 @@ class AuditProgramController extends Controller
         $param = json_decode($json);
         $param_array = json_decode($json, true);
         //
-        $program = new AuditProgram();
+        $auditor_activitie = new AuditAuditorsActivities();
         $request->merge($param_array);
         $validatedData = \Validator::make($param_array, [ 
-                    'begin' => 'required',
-                    'end' => 'required',
-                    'objectives' => 'required',
-                    'scope' => 'required',
-                    'resposabilities' => 'required',                    
-                    'approved' => 'required|in:0,1',
-                    'resources' => 'required',
-                    'observation' => 'required',
-                    'enable' => 'required|in:0,1',
-                    'delete' => 'required|in:0,1'
+                    'id_activities' => 'required',
+                    'id_user' => 'required'
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
-            $program->begin = $param->begin;
-            $program->end = $param->end;
-            $program->objectives = $param->objectives;
-            $program->scope = $param->scope;
-            $program->resposabilities = $param->resposabilities;
-            $program->approved = $param->approved;
-            $program->resources = $param->resources;
-            $program->observation = $param->observation;
-            $program->enable = $param->enable;
-            $program->delete = $param->delete;
-            $program->save();
+            $auditor_activitie->id_activities = $param->id_activities;
+            $auditor_activitie->id_user = $param->id_user;
+            $auditor_activitie->save();
 
             $data = array(
-                'program' => $program,
+                'auditors_activities' => $auditor_activitie,
                 'status' => 'success',
                 'code' => 200
             );
@@ -87,15 +80,15 @@ class AuditProgramController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $program = AuditProgram::find($id);
-        if($program != null){
+        $auditor_activitie = AuditAuditorsActivities::find($id);
+        if($auditor_activitie != null){
                 return response()->json(array(
-                        'program'=> $program,
+                        'auditors_activities'=> $auditor_activitie,
                         'status'=>'success'
                         ), 200);
         }else{
@@ -108,10 +101,10 @@ class AuditProgramController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\AuditProgram  $auditProgram
+     * @param  \App\AuditAuditorsActivities  $AuditAuditorsActivities
      * @return \Illuminate\Http\Response
      */
-    public function edit(AuditProgram $auditProgram)
+    public function edit(AuditAuditorsActivities $AuditAuditorsActivities)
     {
         //
     }
@@ -119,8 +112,8 @@ class AuditProgramController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  int $id
      * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update($id, Request $request)
@@ -129,27 +122,21 @@ class AuditProgramController extends Controller
         
         $param = json_decode($json);
         $param_array = json_decode($json, true);//Convierte en array
+        //$request->merge($param_array);
+        //var_dump($param_array);
         $validatedData = \Validator::make($param_array, [ 
-                    'begin' => 'required',
-                    'end' => 'required',
-                    'objectives' => 'required',
-                    'scope' => 'required',
-                    'resposabilities' => 'required',                    
-                    'approved' => 'required|in:0,1',
-                    'resources' => 'required',
-                    'observation' => 'required',
-                    'enable' => 'required|in:0,1',
-                    'delete' => 'required|in:0,1'
+                    'id_activities' => 'required',
+                    'id_user' => 'required'
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
 
-        $program = AuditProgram::where('id', $id)->update($param_array);
+        $auditor_activitie = AuditAuditorsActivities::where('id', $id)->update($param_array);
 
         $data = array(
-                'program' => $param,
+                'auditors_activities' => $param,
                 'status' => 'success',
                 'code' => 200
             );
@@ -159,17 +146,16 @@ class AuditProgramController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  int $id
      * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id, Request $request)
     {
-        $program = AuditProgram::find($id);
-        $program->delete();
+        $auditor_activitie = AuditAuditorsActivities::find($id);
+        $auditor_activitie->delete();
         $data = array(
-                'program' => $program,
+                'auditors_activities' => $auditor_activitie,
                 'status' => 'success',
                 'code' => 200
             );

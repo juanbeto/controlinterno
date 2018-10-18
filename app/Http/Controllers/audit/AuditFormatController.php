@@ -15,72 +15,24 @@ class AuditFormatController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $format = AuditFormat::all();
+        return response()->json(array(
+                'format'=> $format,
+                'status'=>'success'
+                ), 200);
+    }   
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\AuditFormat  $auditFormat
-     * @return \Illuminate\Http\Response
-     */
-    public function show(AuditFormat $auditFormat)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\AuditFormat  $auditFormat
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(AuditFormat $auditFormat)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\AuditFormat  $auditFormat
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, AuditFormat $auditFormat)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\AuditFormat  $auditFormat
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(AuditFormat $auditFormat)
-    {
-        //
+    public function show($id){
+        $format = AuditFormat::find($id);
+        if($format != null){
+            return response()->json(array(
+                    'format'=> $format,
+                    'status'=>'success'
+                    ), 200);
+        }else{
+            return response()->json(array(
+                    'status'=>'error'
+                    ), 200);
+        }    
     }
 }

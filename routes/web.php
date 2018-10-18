@@ -15,6 +15,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//***********************************************************************//
+//***************List url's of the services of Risks********************//
+//***********************************************************************//
+
+
 Route::post('/api/risks/impact','RisksImpactController@index');
 Route::get('/api/risks/impact','RisksImpactController@index');
 Route::get('/api/risks/impact/{id}','RisksImpactController@show');
@@ -52,9 +57,37 @@ Route::get('/api/risks/controltype/{id}','RisksControlTypeController@show');
 
 Route::resource('/api/risks/factors','risks\RisksFactorController');
 
+//***********************************************************************//
+//***************List url's of the services of Audits********************//
+//***********************************************************************//
+
 Route::post('/api/audit/areas','audit\AuditAreasController@index');
 Route::get('/api/audit/areas','audit\AuditAreasController@index');
 Route::get('/api/audit/areas/{id}','audit\AuditAreasController@show');
+
+Route::resource('/api/audit/activities','audit\AuditActivitiesController');
+Route::get('/api/audit/activities/{id_audit}/audit','audit\AuditActivitiesController@indexAudit');
+
+Route::resource('/api/audit/auditors','audit\AuditAuditorsController');
+Route::get('/api/audit/auditors/{id_audit}/audit','audit\AuditAuditorsController@indexAudit');
+
+Route::resource('/api/audit/auditorsactivities','audit\AuditAuditorsActivitiesController');
+Route::get('/api/audit/auditorsactivities/{id_activitie}/activitie','audit\AuditAuditorsActivitiesController@indexActivitie');
+
+Route::resource('/api/audit/audit','audit\AuditController');
+Route::get('/api/audit/program/{id_audit}/audit','audit\AuditController@indexAudit');
+
+Route::post('/api/audit/format','audit\AuditFormatController@index');
+Route::get('/api/audit/format','audit\AuditFormatController@index');
+Route::get('/api/audit/format/{id}','audit\AuditFormatController@show');
+
+Route::resource('/api/audit/planning','audit\AuditPlanningController');
+Route::get('/api/audit/planning/{id_audit}/audit','audit\AuditPlanningController@indexAudit');
+
+Route::resource('/api/audit/program','audit\AuditProgramController');
+
+Route::resource('/api/audit/question','audit\AuditProgramController');
+
 
 Route::get('/clear-cache', function(){
 	$code = Artisan::call('clear:cache');
