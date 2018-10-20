@@ -75,7 +75,7 @@ Route::resource('/api/audit/auditorsactivities','audit\AuditAuditorsActivitiesCo
 Route::get('/api/audit/auditorsactivities/{id_activitie}/activitie','audit\AuditAuditorsActivitiesController@indexActivitie');
 
 Route::resource('/api/audit/audit','audit\AuditController');
-Route::get('/api/audit/program/{id_audit}/audit','audit\AuditController@indexAudit');
+Route::get('/api/audit/audit/{id_audit}/audit','audit\AuditController@indexAudit');
 
 Route::post('/api/audit/format','audit\AuditFormatController@index');
 Route::get('/api/audit/format','audit\AuditFormatController@index');
@@ -86,7 +86,7 @@ Route::get('/api/audit/planning/{id_audit}/audit','audit\AuditPlanningController
 
 Route::resource('/api/audit/program','audit\AuditProgramController');
 
-Route::resource('/api/audit/question','audit\AuditProgramController');
+Route::resource('/api/audit/question','audit\AuditQuestionController');
 
 
 Route::get('/clear-cache', function(){
