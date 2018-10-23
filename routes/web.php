@@ -86,7 +86,7 @@ Route::get('/api/audit/planning/{id_audit}/audit','audit\AuditPlanningController
 
 Route::resource('/api/audit/program','audit\AuditProgramController');
 
-Route::resource('/api/audit/question','audit\AuditQuestionController');
+Route::resource('/api/audit/question','audit\AuditQuestionController')->middleware('cors');
 
 
 Route::get('/clear-cache', function(){

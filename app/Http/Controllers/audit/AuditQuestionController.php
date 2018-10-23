@@ -48,13 +48,13 @@ class AuditQuestionController extends Controller
         $question = new AuditQuestion();
         $request->merge($param_array);
         $validatedData = \Validator::make($param_array, [ 
-                    'name' => 'required|min:5'
+                    'NAME' => 'required|min:5'
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
-            $question->name = $param->name;
+            $question->name = $param->NAME;
             $question->save();
 
             $data = array(
@@ -112,13 +112,15 @@ class AuditQuestionController extends Controller
         $param = json_decode($json);
         $param_array = json_decode($json, true);//Convierte en array
         $validatedData = \Validator::make($param_array, [ 
-                    'name' => 'required|min:5'
+                    'NAME' => 'required|min:5'
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
 
+        unset($param_array['ID']);
+        unset($param_array['CREATED_AT']);
         $question = AuditQuestion::where('id', $id)->update($param_array);
 
         $data = array(
