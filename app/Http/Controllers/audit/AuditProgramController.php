@@ -15,7 +15,7 @@ class AuditProgramController extends Controller
      */
     public function index()
     {
-        $programs = AuditProgram::All();
+        $programs = AuditProgram::Where('is_delete', '0')->get();
         return response()->json(array(
                 'programs'=> $programs,
                 'status'=>'success'
@@ -72,7 +72,7 @@ class AuditProgramController extends Controller
             $program->resources = $param->resources;
             $program->observation = $param->observation;
             $program->enable = $param->enable;
-            $program->delete = $param->delete;
+            $program->delete = $param->delete;  
             $program->save();
 
             $data = array(
@@ -166,8 +166,18 @@ class AuditProgramController extends Controller
      */
     public function destroy($id, Request $request)
     {
-        $program = AuditProgram::find($id);
+        /*$program = AuditProgram::find($id);
         $program->delete();
+        $data = array(
+                'program' => $program,
+                'status' => 'success',
+                'code' => 200
+            );
+
+        return response()->json($data, 200);*/
+        
+        $program1 = AuditProgram::where('id', $id)->update(array('is_delete'=>'1'));
+        $program = AuditProgram::find($id);
         $data = array(
                 'program' => $program,
                 'status' => 'success',

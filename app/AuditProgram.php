@@ -10,12 +10,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $END
  * @property string $OBJECTIVES
  * @property string $SCOPE
- * @property string $RESPOSABILITIES
+ * @property string $RESPONSABILITIES
  * @property string $APPROVED
  * @property string $RESOURCES
  * @property string $OBSERVATION
  * @property string $ENABLE
- * @property string $DELETE
+ * @property string $IS_DELETE
  * @property string $CREATED_AT
  * @property string $UPDATED_AT
  * @property int $CREATED_BY
@@ -40,6 +40,6 @@ class AuditProgram extends Model
     /**
      * @var array
      */
-    protected $fillable = ['BEGIN', 'END', 'OBJECTIVES', 'SCOPE', 'RESPOSABILITIES', 'APPROVED', 'RESOURCES', 'OBSERVATION', 'ENABLE', 'DELETE', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY'];
+    protected $fillable = ['BEGIN', 'END', 'OBJECTIVES', 'SCOPE', 'RESPONSABILITIES', 'APPROVED', 'RESOURCES', 'OBSERVATION', 'ENABLE', 'IS_DELETE', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY'];
 
 }

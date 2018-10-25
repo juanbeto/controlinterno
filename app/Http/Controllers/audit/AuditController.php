@@ -22,6 +22,25 @@ class AuditController extends Controller
                 ), 200);
     }
 
+     /**
+     * Display a listing of the resource.
+     * @param  int $id_program
+     * @return \Illuminate\Http\Response
+     */
+    public function indexSearch(Request $request)
+    {
+        //Recoger datos post
+        $json =  $request->input('json', null);
+        $param = json_decode($json);
+        $param_array = json_decode($json, true);
+
+        $audits = Audit::where($param_array)->get();
+        return response()->json(array(
+                'audits'=> $audits,
+                'status'=>'success'
+                ), 200);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

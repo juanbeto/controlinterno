@@ -76,8 +76,11 @@ Route::get('/api/audit/auditorsactivities/{id_activitie}/activitie','audit\Audit
 
 Route::resource('/api/audit/audit','audit\AuditController');
 Route::get('/api/audit/audit/{id_audit}/audit','audit\AuditController@indexAudit');
+Route::post('/api/audit/audit/search','audit\AuditController@indexSearch');
 
 Route::post('/api/audit/format','audit\AuditFormatController@index');
+Route::post('/api/audit/format/search','audit\AuditFormatController@search');
+Route::put('/api/audit/format/{id}','audit\AuditFormatController@update');
 Route::get('/api/audit/format','audit\AuditFormatController@index');
 Route::get('/api/audit/format/{id}','audit\AuditFormatController@show');
 
