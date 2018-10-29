@@ -28,7 +28,7 @@ class AuditPlanningController extends Controller
     public function indexAudit($id_audit)
     {
 
-        $plannings = AuditPlanning::where('id_audit', $id_audit)->get();
+        $plannings = AuditPlanning::where('id_audit', $id_audit)->orderBy('id_area', 'cycle')->with('AuditAreas')->get();        
         return response()->json(array(
                 'plannings'=> $plannings,
                 'status'=>'success'

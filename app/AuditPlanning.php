@@ -54,8 +54,8 @@ class AuditPlanning extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function auditArea()
+    public function auditAreas()
     {
-        return $this->belongsTo('App\AuditArea', 'ID_AREA', 'ID');
+        return $this->belongsTo('App\AuditAreas', 'ID_AREA', 'ID');
     }
 }
