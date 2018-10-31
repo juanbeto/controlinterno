@@ -62,32 +62,32 @@ class AuditActivitiesController extends Controller
         $activitie = new AuditActivities();
         $request->merge($param_array);
         $validatedData = \Validator::make($param_array, [ 
-                    'id_audit' => 'required',
-                    'begin' => 'required',
-                    'end' => 'required',
-                    'name' => 'required|min:5',
-                    'numerals_iso' => 'required',
-                    'numerals_meci' => 'required',
-                    'id_user_auditor' => 'required'
+                    'ID_AUDIT' => 'required',
+                    'BEGIN' => 'required',
+                    'END' => 'required',
+                    'NAME' => 'required|min:5',
+                    'NUMERALS_ISO' => 'required',
+                    'NUMERALS_MECI' => 'required',
+                    'ID_USER_AUDITOR' => 'required'
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
-            $activitie->ID_AUDIT = $param->id_audit;
-            $activitie->BEGIN = $param->begin;
-            $activitie->END = $param->end;
-            $activitie->NAME = $param->name;
-            $activitie->NUMERALS_ISO = $param->numerals_iso;
-            $activitie->NUMERALS_MECI = $param->numerals_meci;
-            $activitie->ID_USER_AUDITOR = $param->id_user_auditor;
-            $activitie->save();
+        $activitie->ID_AUDIT = $param->ID_AUDIT;
+        $activitie->BEGIN = $param->BEGIN;
+        $activitie->END = $param->END;
+        $activitie->NAME = $param->NAME;
+        $activitie->NUMERALS_ISO = $param->NUMERALS_ISO;
+        $activitie->NUMERALS_MECI = $param->NUMERALS_MECI;
+        $activitie->ID_USER_AUDITOR = $param->ID_USER_AUDITOR;
+        $activitie->save();
 
-            $data = array(
-                'activitie' => $activitie,
-                'status' => 'success',
-                'code' => 200
-            );
+        $data = array(
+            'activitie' => $activitie,
+            'status' => 'success',
+            'code' => 200
+        );
 
             return response()->json($data, 200);
     }
@@ -140,14 +140,13 @@ class AuditActivitiesController extends Controller
         //$request->merge($param_array);
         //var_dump($param_array);
         $validatedData = \Validator::make($param_array, [ 
-                    'id_audit' => 'required',
-                    'begin' => 'required',
-                    'end' => 'required',
-                    'name' => 'required|min:5',
-                    'numerals_iso' => 'required',
-                    'numerals_meci' => 'required',
-                    'id_user_auditor' => 'required',
-                    'classification' => 'required'
+                    'ID_AUDIT' => 'required',
+                    'BEGIN' => 'required',
+                    'END' => 'required',
+                    'NAME' => 'required|min:5',
+                    'NUMERALS_ISO' => 'required',
+                    'NUMERALS_MECI' => 'required',
+                    'ID_USER_AUDITOR' => 'required'
         ]);        
 
         if($validatedData->fails()){
