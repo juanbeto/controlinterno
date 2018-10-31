@@ -68,21 +68,19 @@ class AuditActivitiesController extends Controller
                     'name' => 'required|min:5',
                     'numerals_iso' => 'required',
                     'numerals_meci' => 'required',
-                    'id_user_auditor' => 'required',
-                    'classification' => 'required'
+                    'id_user_auditor' => 'required'
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
-            $activitie->id_audit = $param->id_audit;
-            $activitie->begin = $param->begin;
-            $activitie->end = $param->end;
-            $activitie->name = $param->name;
-            $activitie->numerals_iso = $param->numerals_iso;
-            $activitie->numerals_meci = $param->numerals_meci;
-            $activitie->id_user_auditor = $param->id_user_auditor;
-            $activitie->classification = $param->classification;
+            $activitie->ID_AUDIT = $param->id_audit;
+            $activitie->BEGIN = $param->begin;
+            $activitie->END = $param->end;
+            $activitie->NAME = $param->name;
+            $activitie->NUMERALS_ISO = $param->numerals_iso;
+            $activitie->NUMERALS_MECI = $param->numerals_meci;
+            $activitie->ID_USER_AUDITOR = $param->id_user_auditor;
             $activitie->save();
 
             $data = array(
