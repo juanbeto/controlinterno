@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $ID_AREA
  * @property string $CYCLE
  * @property string $QUESTION
- * @property string $NUMERALS
+ * @property string $NUMERALS_ISO
+ * @property string $NUMERALS_MECI
  * @property string $RECORDS
  * @property string $OBSERVATION
  * @property string $ACCORDANCE
@@ -41,7 +42,7 @@ class AuditPlanning extends Model
     /**
      * @var array
      */
-    protected $fillable = ['ID_AUDIT', 'ID_AREA', 'CYCLE', 'QUESTION', 'NUMERALS', 'RECORDS', 'OBSERVATION', 'ACCORDANCE', 'ACTION', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY'];
+    protected $fillable = ['ID_AUDIT', 'ID_AREA', 'CYCLE', 'QUESTION', 'NUMERALS_ISO', 'NUMERALS_MECI', 'RECORDS', 'OBSERVATION', 'ACCORDANCE', 'ACTION', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

@@ -61,29 +61,25 @@ class AuditPlanningController extends Controller
         $planning = new AuditPlanning();
         $request->merge($param_array);
         $validatedData = \Validator::make($param_array, [ 
-                    'id_audit' => 'required',
-                    'id_area' => 'required',
-                    'cycle' => 'required|in:P,H,V,A',
-                    'question' => 'required',
-                    'numerals' => 'required',
-                    'records' => 'required',                    
-                    'observations' => 'required',
-                    'accordance' => 'required',
-                    'actions' => 'required'                   
+                    'ID_AUDIT' => 'required',
+                    'ID_AUDIT' => 'required',
+                    'CYCLE' => 'required|in:P,H,V,A',
+                    'QUESTION' => 'required'                    
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
-            $planning->id_audit = $param->id_audit;
-            $planning->id_area = $param->id_area;
-            $planning->cycle = $param->cycle;
-            $planning->question = $param->question;
-            $planning->numerals = $param->numerals;
-            $planning->records = $param->records;
-            $planning->observations = $param->observations;
-            $planning->accordance = $param->accordance;
-            $planning->actions = $param->actions;
+            $planning->id_audit = $param->ID_AUDIT;
+            $planning->id_area = $param->ID_AREA;
+            $planning->cycle = $param->CYCLE;
+            $planning->question = $param->QUESTION;
+            $planning->numerals_iso = $param->NUMERALS_ISO;
+            $planning->numerals_meci = $param->NUMERALS_MECI;
+            $planning->records = $param->RECORDS;
+            $planning->observation = $param->OBSERVATION;
+            $planning->accordance = $param->ACCORDANCE;
+            $planning->action = $param->ACTION;
             $planning->save();
 
             $data = array(
@@ -141,15 +137,10 @@ class AuditPlanningController extends Controller
         $param = json_decode($json);
         $param_array = json_decode($json, true);//Convierte en array
         $validatedData = \Validator::make($param_array, [
-                    'id_audit' => 'required', 
-                    'id_area' => 'required',
-                    'cycle' => 'required|in:P,H,V,A',
-                    'question' => 'required',
-                    'numerals' => 'required',
-                    'records' => 'required',                    
-                    'observations' => 'required',
-                    'accordance' => 'required',
-                    'actions' => 'required'  
+                    'ID_AUDIT' => 'required', 
+                    'ID_AUDIT' => 'required',
+                    'CYCLE' => 'required|in:P,H,V,A',
+                    'QUESTION' => 'required'
         ]);        
 
         if($validatedData->fails()){
