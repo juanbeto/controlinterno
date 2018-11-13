@@ -62,7 +62,7 @@ class AuditPlanningController extends Controller
         $request->merge($param_array);
         $validatedData = \Validator::make($param_array, [ 
                     'ID_AUDIT' => 'required',
-                    'ID_AUDIT' => 'required',
+                    'ID_AREA' => 'required',
                     'CYCLE' => 'required|in:P,H,V,A',
                     'QUESTION' => 'required'                    
         ]);        
@@ -138,7 +138,7 @@ class AuditPlanningController extends Controller
         $param_array = json_decode($json, true);//Convierte en array
         $validatedData = \Validator::make($param_array, [
                     'ID_AUDIT' => 'required', 
-                    'ID_AUDIT' => 'required',
+                    'ID_AREA' => 'required',
                     'CYCLE' => 'required|in:P,H,V,A',
                     'QUESTION' => 'required'
         ]);        
