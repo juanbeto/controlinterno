@@ -37,6 +37,9 @@ Route::resource('/api/risks/risks','risks\RisksController');
 Route::resource('/api/risks/actions','risks\RisksActionController');
 Route::get('/api/risks/actions/{id_risks}/risk','risks\RisksActionController@indexRisks');
 
+Route::resource('/api/risks/controls','risks\RisksControlController');
+Route::get('/api/risks/actions/{id_risks}/risk','risks\RisksControlController@indexRisks');
+
 Route::resource('/api/risks/causeseffects','RisksCauseseffectsController');
 Route::get('/api/risks/causeseffects/{id_risks}/risk','RisksCauseseffectsController@indexRisks');
 
