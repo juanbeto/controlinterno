@@ -132,10 +132,11 @@ class AuditPlanningController extends Controller
      */
     public function update($id, Request $request)
     {
-        $json =  $request->input('json', null);
-        
-        $param = json_decode($json);
+        $json =  $request->input('json', null);        
+
+        $param = json_decode($json);        
         $param_array = json_decode($json, true);//Convierte en array
+        unset($param_array['audit_areas']);
         $validatedData = \Validator::make($param_array, [
                     'ID_AUDIT' => 'required', 
                     'ID_AREA' => 'required',
