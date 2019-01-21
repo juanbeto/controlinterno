@@ -6,15 +6,21 @@ use App\Audit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Helpers\JwtAuth;
+
+
 class AuditController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      * @param  int $id_program
      * @return \Illuminate\Http\Response
      */
-    public function index($id_program)
+    public function index($id_program, Request $request)
     {
+
+        $this->verifiqueAuth($request);
         $audits = Audit::where('id_program', $id_program)->get();
         return response()->json(array(
                 'audits'=> $audits,
@@ -122,19 +128,27 @@ class AuditController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
-        $audit = Audit::find($id);
-        if($audit != null){
+
+        $vali = $this->verifiqueAuth($request);
+        if($vali){
+            $audit = Audit::find($id);
+            if($audit != null){
+                    return response()->json(array(
+                            'audit'=> $audit,
+                            'status'=>'success'
+                            ), 200);
+            }else{
                 return response()->json(array(
-                        'audit'=> $audit,
-                        'status'=>'success'
-                        ), 200);
+                            'status'=>'error'
+                            ), 200);
+            }  
         }else{
             return response()->json(array(
-                        'status'=>'error'
-                        ), 200);
-        }  
+                            'status'=>'error Authorization'
+                            ), 200);
+        }
     }
 
     /**

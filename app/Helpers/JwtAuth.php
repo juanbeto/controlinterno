@@ -1,6 +1,6 @@
 <?php
 namespace App\Helpers;
-use Firebug\JWT\JWT;
+use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\DB;
 use App\AdminUser;
 
@@ -17,12 +17,12 @@ class JwtAuth{
 
       $signup = false;
 
-      $user = USER::where(
+      $user = AdminUser::where(
         array(
           'email'=>$email,
           'password'=>$password
         )
-      )->firts();
+      )->first();
 
 
       if(is_object($user)){
@@ -56,6 +56,7 @@ class JwtAuth{
 
   public function checkToken($jwt, $getIdentity = false){
     $auth = false;
+    $decode = null;
     try{
       $decode = JWT::decode($jwt, $this->key, array($this->encript_algoritm));
 
@@ -64,7 +65,6 @@ class JwtAuth{
     }catch(\DomainException $e){
       $auth = false;
     }
-
     if(is_object($decode) && isset($decode->sub)){
       $auth = true;
     }else{

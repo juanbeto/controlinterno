@@ -95,6 +95,10 @@ Route::resource('/api/audit/program','audit\AuditProgramController');
 Route::resource('/api/audit/question','audit\AuditQuestionController')->middleware('cors');
 
 
+//Route::resource('/api/Admin/user','Admin\UserController');
+Route::post('/api/Admin/user/login','Admin\UserController@login');
+
+
 Route::get('/clear-cache', function(){
 	$code = Artisan::call('clear:cache');
 });
