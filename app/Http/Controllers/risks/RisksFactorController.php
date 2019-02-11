@@ -15,8 +15,8 @@ class RisksFactorController extends Controller
      */
     public function index()
     {
-        
-        $factors = RiskFactor::all()->load('RisksFactorType');
+
+        $factors = RisksFactor::all()->load('RisksFactorType');
         return response()->json(array(
                 'factors'=> $factors,
                 'status'=>'success'
@@ -46,14 +46,14 @@ class RisksFactorController extends Controller
         $param = json_decode($json);
         $param_array = json_decode($json, true);
         //
-        $factor = new RiskFactor();
+        $factor = new RisksFactor();
         $request->merge($param_array);
-        $validatedData = \Validator::make($param_array, [ 
+        $validatedData = \Validator::make($param_array, [
                     'name' => 'required',
                     'id_factor_type' => 'required',
                     'description' => 'required',
                     'definition' => 'required'
-        ]);        
+        ]);
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
@@ -61,8 +61,8 @@ class RisksFactorController extends Controller
 
             $factor->name = $param->name;
             $factor->id_factor_type = $param->id_factor_type;
-            $factor->description = $param->description;            
-            $factor->definition = $param->definition;          
+            $factor->description = $param->description;
+            $factor->definition = $param->definition;
             $factor->save();
 
             $data = array(
@@ -82,7 +82,7 @@ class RisksFactorController extends Controller
      */
     public function show($id)
     {
-        $factor = RiskFactor::find($id);
+        $factor = RisksFactor::find($id);
         if($risfactorks != null){
                 return response()->json(array(
                         'factor'=> $factor,
@@ -92,7 +92,7 @@ class RisksFactorController extends Controller
             return response()->json(array(
                         'status'=>'error'
                         ), 200);
-        }    
+        }
     }
 
     /**
@@ -116,23 +116,23 @@ class RisksFactorController extends Controller
     public function update($id, Request $request)
     {
         $json =  $request->input('json', null);
-        
+
         $param = json_decode($json);
         $param_array = json_decode($json, true);//Convierte en array
         //$request->merge($param_array);
         //var_dump($param_array);
-        $validatedData = \Validator::make($param_array, [ 
+        $validatedData = \Validator::make($param_array, [
                     'name' => 'required',
                     'id_factor_type' => 'required',
                     'description' => 'required',
                     'definition' => 'required'
-        ]);        
+        ]);
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
 
-        $factor = RiskFactor::where('id', $id)->update($param_array);
+        $factor = RisksFactor::where('id', $id)->update($param_array);
 
         $data = array(
                 'factor' => $param,
@@ -151,7 +151,7 @@ class RisksFactorController extends Controller
      */
     public function destroy($id, Request $request)
     {
-        $factor = RiskFactor::find($id);
+        $factor = RisksFactor::find($id);
         $factor->delete();
         $data = array(
                 'factor' => $factor,

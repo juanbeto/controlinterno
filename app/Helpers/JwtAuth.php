@@ -6,9 +6,9 @@ use App\AdminUser;
 
 class JwtAuth{
   private $key;
-  private $encript_algoritm
+  private $encript_algoritm;
 
-  funtion __construct(){
+  function __construct(){
       $this->key = 'HJSKaquef_*12A89p';
       $this->encript_algoritm = 'HS256';
   }
