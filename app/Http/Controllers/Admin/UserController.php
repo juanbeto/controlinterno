@@ -20,13 +20,12 @@ class UserController extends Controller
 
     	$email = (!is_null($json) && isset($param->email))?$param->email:null;
     	$password = (!is_null($json) && isset($param->password))?$param->password:null;
-    	$getToken = (!is_null($json) && isset($param->gettoken))?$param->gettoken:true;
-    	
+    	$getToken = (!is_null($json) && isset($param->gettoken))?$param->gettoken:false;
+    
 
     	//cifrar password
     	$pwd = hash('sha256', $password);
-    	
-		if(!is_null($email) && !is_null($password) && ($getToken == null || $getToken == 'false')){
+		if(!is_null($email) && !is_null($password) && ($getToken == null || $getToken == false)){
 			$signup = $jwt->signup($email, $pwd);
 		}else if($getToken != null){
 			$signup = $jwt->signup($email, $pwd, $getToken);

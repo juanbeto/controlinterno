@@ -23,8 +23,7 @@ class JwtAuth{
           'password'=>$password
         )
       )->first();
-
-
+      
       if(is_object($user)){
         $signup = true;
       }
@@ -41,7 +40,7 @@ class JwtAuth{
 
         $jwt = JWT::encode($token, $this->key, $this->encript_algoritm);
         $decode = JWT::decode($jwt, $this->key, array($this->encript_algoritm));
-        if(!is_null($getToken))
+        if(is_null($getToken))
         {
           return $jwt;
         }else{
