@@ -146,7 +146,8 @@ class AuditController extends Controller
             }  
         }else{
             return response()->json(array(
-                            'status'=>'error Authorization'
+                            'status'=>'error_authorization',
+                            'message'=>'error Authorization'
                             ), 200);
         }
     }
