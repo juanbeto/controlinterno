@@ -44,35 +44,33 @@ class AuditProgramController extends Controller
         $json =  $request->input('json', null);
         $param = json_decode($json);
         $param_array = json_decode($json, true);
+        //var_dump($param_array);
         //
         $program = new AuditProgram();
         $request->merge($param_array);
         $validatedData = \Validator::make($param_array, [ 
-                    'begin' => 'required',
-                    'end' => 'required',
-                    'objectives' => 'required',
-                    'scope' => 'required',
-                    'resposabilities' => 'required',                    
-                    'approved' => 'required|in:0,1',
-                    'resources' => 'required',
-                    'observation' => 'required',
-                    'enable' => 'required|in:0,1',
-                    'delete' => 'required|in:0,1'
+                    'BEGIN' => 'required',
+                    'END' => 'required',
+                    'OBJECTIVES' => 'required',
+                    'SCOPE' => 'required',
+                    'RESPONSABILITIES' => 'required',                    
+                    'RESOURCES' => 'required',
+                    'OBSERVATION' => 'required'
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
-            $program->begin = $param->begin;
-            $program->end = $param->end;
-            $program->objectives = $param->objectives;
-            $program->scope = $param->scope;
-            $program->resposabilities = $param->resposabilities;
-            $program->approved = $param->approved;
-            $program->resources = $param->resources;
-            $program->observation = $param->observation;
-            $program->enable = $param->enable;
-            $program->delete = $param->delete;  
+            $program->BEGIN = $param->BEGIN;
+            $program->END = $param->END;
+            $program->OBJECTIVES = $param->OBJECTIVES;
+            $program->SCOPE = $param->SCOPE;
+            $program->RESPONSABILITIES = $param->RESPONSABILITIES;
+            $program->APPROVED = $param->APPROVED;
+            $program->RESOURCES = $param->RESOURCES;
+            $program->OBSERVATION = $param->OBSERVATION;
+            $program->ENABLE = $param->ENABLE;
+            $program->IS_DELETE = $param->IS_DELETE;  
             $program->save();
 
             $data = array(
@@ -130,16 +128,16 @@ class AuditProgramController extends Controller
         $param = json_decode($json);
         $param_array = json_decode($json, true);//Convierte en array
         $validatedData = \Validator::make($param_array, [ 
-                    'begin' => 'required',
-                    'end' => 'required',
-                    'objectives' => 'required',
-                    'scope' => 'required',
-                    'resposabilities' => 'required',                    
-                    'approved' => 'required|in:0,1',
-                    'resources' => 'required',
-                    'observation' => 'required',
-                    'enable' => 'required|in:0,1',
-                    'delete' => 'required|in:0,1'
+                    'BEGIN' => 'required',
+                    'END' => 'required',
+                    'OBJECTIVES' => 'required',
+                    'SCOPE' => 'required',
+                    'RESPOSABILITIES' => 'required',                    
+                    'APPROVED' => 'required|in:0,1',
+                    'RESOURCES' => 'required',
+                    'OBSERVATION' => 'required'
+                   // 'enable' => 'required|in:0,1',
+                    //'delete' => 'required|in:0,1'
         ]);        
 
         if($validatedData->fails()){
