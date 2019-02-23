@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $ID
- * @property int $CODE
+ * @property string $CODE
  * @property int $ID_PROCESS
  * @property int $ID_PERIOD
  * @property string $NAME
@@ -20,16 +20,20 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $PROBABILITY
  * @property int $CREATEDBY
  * @property string $CREATEDATE
- * @property RisksAction[] $risksActions
- * @property RisksCauseseffect[] $risksCauseseffects
- * @property RisksControl[] $risksControls
- * @property RisksImpactRisk[] $risksImpactRisks
- * @property RisksPolitic[] $risksPolitics
- * @property RisksScore[] $risksScores
- * @property RisksTablescore[] $risksTablescores
+ * @property string $CREATED_AT
+ * @property string $UPDATED_AT
+ * @property int $CREATED_BY
+ * @property int $UPDATED_BY
  */
 class Risks extends Model
 {
+    /**
+     * The table associated with the model.
+     * 
+     * @var string
+     */
+    protected $table = 'RISKS';
+
     /**
      * The primary key for the model.
      * 
@@ -37,66 +41,9 @@ class Risks extends Model
      */
     protected $primaryKey = 'ID';
 
-    public $timestamps = false;
-
     /**
      * @var array
      */
-    protected $fillable = ['CODE', 'ID_PROCESS', 'ID_PERIOD', 'NAME', 'DESCRIPTION', 'EFFECTS', 'CAUSES', 'CLASSIFICATION', 'OBJECT', 'FACTOR', 'FACTORVULNERABILITY', 'PROBABILITY', 'CREATEDBY', 'CREATEDATE'];
+    protected $fillable = ['CODE', 'ID_PROCESS', 'ID_PERIOD', 'NAME', 'DESCRIPTION', 'EFFECTS', 'CAUSES', 'CLASSIFICATION', 'OBJECT', 'FACTOR', 'FACTORVULNERABILITY', 'PROBABILITY', 'CREATEDBY', 'CREATEDATE', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY'];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function risksActions()
-    {
-        return $this->hasMany('App\RisksAction', 'ID_RISKS', 'ID');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function risksCauseseffects()
-    {
-        return $this->hasMany('App\RisksCauseseffect', 'ID_RISKS', 'ID');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function risksControls()
-    {
-        return $this->hasMany('App\RisksControl', 'ID_RISKS', 'ID');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function risksImpactRisks()
-    {
-        return $this->hasMany('App\RisksImpactRisk', 'ID_RISKS', 'ID');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function risksPolitics()
-    {
-        return $this->hasMany('App\RisksPolitic', 'ID_RISKS', 'ID');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function risksScores()
-    {
-        return $this->hasMany('App\RisksScore', 'ID_RISKS', 'ID');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function risksTablescores()
-    {
-        return $this->hasMany('App\RisksTablescore', 'ID_RISKS', 'ID');
-    }
 }

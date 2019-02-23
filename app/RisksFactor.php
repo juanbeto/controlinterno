@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $ID_FACTOR_TYPE
  * @property string $DESCRIPTION
  * @property string $DEFINITION
+ * @property string $CREATED_AT
+ * @property string $UPDATED_AT
+ * @property int $CREATED_BY
+ * @property int $UPDATED_BY
  * @property RisksFactorType $risksFactorType
  */
 class RisksFactor extends Model
@@ -31,7 +35,7 @@ class RisksFactor extends Model
     /**
      * @var array
      */
-    protected $fillable = ['NAME', 'ID_FACTOR_TYPE', 'DESCRIPTION', 'DEFINITION'];
+    protected $fillable = ['NAME', 'ID_FACTOR_TYPE', 'DESCRIPTION', 'DEFINITION', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

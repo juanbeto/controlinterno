@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $ID
  * @property int $ID_RISKS
  * @property string $DESCRIPTION
+ * @property string $CREATED_AT
+ * @property string $UPDATED_AT
+ * @property int $CREATED_BY
+ * @property int $UPDATED_BY
  * @property Risk $risk
  */
 class RisksPolitics extends Model
@@ -29,7 +33,7 @@ class RisksPolitics extends Model
     /**
      * @var array
      */
-    protected $fillable = ['ID_RISKS', 'DESCRIPTION'];
+    protected $fillable = ['ID_RISKS', 'DESCRIPTION', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

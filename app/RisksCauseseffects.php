@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $CAUSES
  * @property string $EFFECTS
  * @property string $CREATEDATE
+ * @property string $CREATED_AT
+ * @property string $UPDATED_AT
+ * @property int $CREATED_BY
+ * @property int $UPDATED_BY
  * @property Risk $risk
  */
 class RisksCauseseffects extends Model
@@ -31,7 +35,7 @@ class RisksCauseseffects extends Model
     /**
      * @var array
      */
-    protected $fillable = ['ID_RISKS', 'CAUSES', 'EFFECTS', 'CREATEDATE'];
+    protected $fillable = ['ID_RISKS', 'CAUSES', 'EFFECTS', 'CREATEDATE', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
