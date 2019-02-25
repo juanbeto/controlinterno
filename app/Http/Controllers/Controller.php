@@ -19,7 +19,6 @@ class Controller extends BaseController
     	$hash = $request->header('Authorization', null);
     	$jwtAuth = new JwtAuth();
     	$checkToken = $jwtAuth->checkToken($hash);
-    	
     	if(!$checkToken){
     		return false;
     	}
