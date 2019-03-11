@@ -92,6 +92,15 @@ Route::get('/api/audit/planning/{id_audit}/audit','audit\AuditPlanningController
 
 Route::resource('/api/audit/program','audit\AuditProgramController');
 
+Route::post('/api/audit/inform','audit\AuditInformController@index');
+Route::put('/api/audit/inform/{id}','audit\AuditInformController@update');
+Route::get('/api/audit/inform','audit\AuditInformController@index');
+Route::get('/api/audit/inform/{id}/audit','audit\AuditInformController@showByAudit');
+Route::get('/api/audit/inform/{id}','audit\AuditInformController@show');
+Route::get('/api/audit/inform/hallazgo/{id}','audit\AuditInformController@getHallazgos');
+Route::resource('/api/audit/inform','audit\AuditInformController');
+
+
 Route::resource('/api/audit/question','audit\AuditQuestionController')->middleware('cors');
 
 

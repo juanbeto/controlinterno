@@ -19,7 +19,6 @@ class AuditController extends Controller
      */
     public function index($id_program, Request $request)
     {
-
         $this->verifiqueAuth($request);
         $audits = Audit::where('id_program', $id_program)->get();
         return response()->json(array(
@@ -130,7 +129,6 @@ class AuditController extends Controller
      */
     public function show($id, Request $request)
     {
-
         $vali = $this->verifiqueAuth($request);
         if($vali){
             $audit = Audit::find($id);
