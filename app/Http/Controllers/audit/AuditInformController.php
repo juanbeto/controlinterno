@@ -18,7 +18,7 @@ class AuditInformController extends Controller
     public function index()
     {
         //$this->verifiqueAuth($request);
-        $informs = AuditInform::All();
+        //$informs = AuditInform::All();
 
         $informs = AuditInform::rightJoin
             ('audit', 'audit.id', '=', 'audit_inform.id_audit')
@@ -73,9 +73,10 @@ class AuditInformController extends Controller
             $inform->APPROVED = $param->APPROVED;
             $inform->save();
 
+            $inform_res = AuditInform::where('id', $inform->ID)->get();
             $data = array(
-                'inform' => $inform,
-                'status' => 'success',
+                'inform' => $inform_res[0],
+                'status' => 'success111',
                 'code' => 200
             );
 
@@ -92,15 +93,14 @@ class AuditInformController extends Controller
     {
         $inform = AuditInform::where('id_audit', $id)->get();
 
-
-        if($inform != null){
+        if(count($inform) > 0){
                 return response()->json(array(
-                        'inform'=> $inform,
+                        'inform'=> $inform[0],
                         'status'=>'success'
                         ), 200);
         }else{
                 return response()->json(array(
-                        'inform'=> null,
+                        'inform'=> [],
                         'status'=>'success'
                         ), 200);
         }
@@ -114,12 +114,11 @@ class AuditInformController extends Controller
      */
     public function show($id)
     {
-        $inform = AuditInform::where('id', $id)->get();
-
+        $inform = AuditInform::where('id_audit', $id)->get();
 
         if($inform != null){
                 return response()->json(array(
-                        'inform'=> $inform,
+                        'inform'=> $inform[0],
                         'status'=>'success'
                         ), 200);
         }else{
@@ -155,15 +154,7 @@ class AuditInformController extends Controller
         $param = json_decode($json);
         $param_array = json_decode($json, true);//Convierte en array
         $validatedData = \Validator::make($param_array, [ 
-                    'ID_AUDIT' => 'required',
-                    'LOCATION' => 'required',
-                    'TYPE_AUDIT' => 'required',
-                    'EXECUTION' => 'required',
-                    'CONCEPT' => 'required',                    
-                    'ACTIVITIES' => 'required',
-                    'NAME_BOSS' => 'required',
-                    'CODE' => 'required',
-                    'APPROVED' => 'required',
+                    'ID_AUDIT' => 'required'
         ]);        
 
         if($validatedData->fails()){
@@ -171,9 +162,9 @@ class AuditInformController extends Controller
         }
 
         $inform = AuditInform::where('id', $id)->update($param_array);
-
+        $inform_res = AuditInform::where('id', $id)->get();
         $data = array(
-                'inform' => $inform,
+                'inform' => $inform_res[0],
                 'status' => 'success',
                 'code' => 200
             );
