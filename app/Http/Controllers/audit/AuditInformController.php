@@ -186,9 +186,9 @@ class AuditInformController extends Controller
 
     public function getHallazgos($id, Request $request){
 
-        $am_area = AuditPlanning::join('audit_areas', 'audit_areas.id', '=', 'audit_planning.id_area')->select('audit_areas.name AS AREA', 'audit_areas.id AS id_area')->where('id_audit', $id)->where('ACCORDANCE', 'am')->distinct()->orderBy('ID_AREA')->get()->toArray();
+        $am_area = AuditPlanning::join('audit_areas', 'audit_areas.id', '=', 'audit_planning.id_area')->select('audit_areas.name AS area', 'audit_areas.id AS id_area')->where('id_audit', $id)->where('ACCORDANCE', 'am')->distinct()->orderBy('ID_AREA')->get()->toArray();
         $nc_area = AuditPlanning::join('audit_areas', 'audit_areas.id', '=', 'audit_planning.id_area')->select('audit_areas.name AS area', 'audit_areas.id AS id_area')->where('id_audit', $id)->where('ACCORDANCE', 'nc')->distinct()->orderBy('audit_areas.name')->get()->toArray();
-        $ar_area = AuditPlanning::where('id_audit', $id)->where('ACCORDANCE', 'ar')->select('ID_AREA')->distinct()->orderBy('ID_AREA')->get()->toArray();
+        $ar_area = AuditPlanning::join('audit_areas', 'audit_areas.id', '=', 'audit_planning.id_area')->select('audit_areas.name AS area', 'audit_areas.id AS id_area')->where('id_audit', $id)->where('ACCORDANCE', 'ar')->distinct()->orderBy('ID_AREA')->get()->toArray();
 
         $array_am_pregun = array();
         $array_nc_pregun = array();
@@ -198,8 +198,8 @@ class AuditInformController extends Controller
             
 
             foreach ($am_area as $area) {
-                $array_am_pregun['area_name'] = $area['AREA'];
-                $array_am_pregun['preguntas'] = AuditPlanning::where('id_audit', $id)->where('ACCORDANCE', 'am')->where('id_area', $id_area)->orderBy('ID')->get()->toArray();;
+                $array_am_pregun['area_name'] = $area['area'];
+                $array_am_pregun['preguntas'] = AuditPlanning::where('id_audit', $id)->where('ACCORDANCE', 'am')->where('id_area', $area['id_area'])->orderBy('ID')->get()->toArray();;
             }
         }
 
@@ -213,9 +213,9 @@ class AuditInformController extends Controller
 
         if(count($ar_area)>0){        
 
-            foreach ($ar_area as $id_area) {
+            foreach ($ar_area as $area) {
                 $array_ar_pregun['area_name'] = $area['area'];
-                $array_ar_pregun['preguntas'] = AuditPlanning::where('id_audit', $id)->where('ACCORDANCE', 'ar')->where('id_area', $id_area)->orderBy('ID')->get()->toArray();;
+                $array_ar_pregun['preguntas'] = AuditPlanning::where('id_audit', $id)->where('ACCORDANCE', 'ar')->where('id_area', $area['id_area'])->orderBy('ID')->get()->toArray();;
             }
         }
 
