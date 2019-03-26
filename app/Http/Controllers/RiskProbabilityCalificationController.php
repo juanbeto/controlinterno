@@ -1,39 +1,47 @@
 <?php
 
-namespace App\Http\Controllers\audit;
+namespace App\Http\Controllers;
 
-use App\AuditPlanning;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\RisksProbabilityCalification;
 
-class AuditPlanningController extends Controller
+class RiskProbabilityCalificationController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $plannings = AuditPlanning::All();
-        return response()->json(array(
-                'plannings'=> $plannings,
-                'status'=>'success'
-                ), 200);
-    }
 
-    /**
-    * Show the lists of activities associated to Audit
-    */
-    public function indexAudit($id_audit)
-    {
+public function index(){
 
-        $plannings = AuditPlanning::where('id_audit', $id_audit)->orderBy('id_area', 'cycle')->with('AuditAreas')->get();        
-        return response()->json(array(
-                'plannings'=> $plannings,
-                'status'=>'success'
-                ), 200);
-    }
+  
+    $probabilityCalifications = RisksProbabilityCalification::All();
+    return response()->json(array(
+        'probabilityCalifications' => $probabilityCalifications,
+        'status' => 'success'
+    ),200);
+
+   
+}
+
+
+   public function usuarios(){
+
+    $usuarios =RisksProbabilityCalification::select('id_user')
+    ->get();
+
+   
+       return response()->json(array(
+        'usuarios' => $usuarios,
+        'status' => 'success'
+    ), 200);
+   }
+
+   
+
+   
 
     /**
      * Show the form for creating a new resource.
@@ -58,32 +66,25 @@ class AuditPlanningController extends Controller
         $param = json_decode($json);
         $param_array = json_decode($json, true);
         //
-        $planning = new AuditPlanning();
+        $probability = new RisksProbabilityCalification();
         $request->merge($param_array);
         $validatedData = \Validator::make($param_array, [ 
-                    'ID_AUDIT' => 'required',
-                    'ID_AREA' => 'required',
-                    'CYCLE' => 'required|in:P,H,V,A',
-                    'QUESTION' => 'required'                    
+                    'ID_USER' => 'required',
+                    'DATE' => 'required'
+                                     
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
-            $planning->id_audit = $param->ID_AUDIT;
-            $planning->id_area = $param->ID_AREA;
-            $planning->cycle = $param->CYCLE;
-            $planning->question = $param->QUESTION;
-            $planning->numerals_iso = $param->NUMERALS_ISO;
-            $planning->numerals_meci = $param->NUMERALS_MECI;
-            $planning->records = $param->RECORDS;
-            $planning->observation = $param->OBSERVATION;
-            $planning->accordance = $param->ACCORDANCE;
-            $planning->action = $param->ACTION;
-            $planning->save();
+            $probability->id_user = $param->ID_USER;
+            $probability->date = $param->date("Y-m-d H:i:s");
+            
+            
+            $probability->save();
 
             $data = array(
-                'planning' => $planning,
+                'probability' => $probability,
                 'status' => 'success',
                 'code' => 200
             );
@@ -99,10 +100,10 @@ class AuditPlanningController extends Controller
      */
     public function show($id)
     {
-        $planning = AuditPlanning::find($id);
-        if($planning != null){
+        $probabilitycalification = RisksProbabilityCalification::find($id);
+        if($probabilitycalification != null){
                 return response()->json(array(
-                        'planning'=> $planning,
+                        'probabilitycalification'=> $probabilitycalification,
                         'status'=>'success'
                         ), 200);
         }else{
@@ -115,10 +116,10 @@ class AuditPlanningController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\AuditPlanning  $auditPlanning
+     * @param  \App\risksCalification  $auditPlanning
      * @return \Illuminate\Http\Response
      */
-    public function edit(AuditPlanning $auditPlanning)
+    public function edit(RisksProcess $risksProcess)
     {
         //
     }
@@ -132,26 +133,23 @@ class AuditPlanningController extends Controller
      */
     public function update($id, Request $request)
     {
-        $json =  $request->input('json', null);        
-
-        $param = json_decode($json);        
+        $json =  $request->input('json', null);
+        
+        $param = json_decode($json);
         $param_array = json_decode($json, true);//Convierte en array
-        unset($param_array['audit_areas']);
         $validatedData = \Validator::make($param_array, [
-                    'ID_AUDIT' => 'required', 
-                    'ID_AREA' => 'required',
-                    'CYCLE' => 'required|in:P,H,V,A',
-                    'QUESTION' => 'required'
+            'ID_USER' => 'required',
+            'DATE' => 'required',
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
 
-        $planning = AuditPlanning::where('id', $id)->update($param_array);
+        $procces = RisksProbabilityCalification::where('id', $id)->update($param_array);
 
         $data = array(
-                'planning' => $param,
+                'probabilitycalification' => $param,
                 'status' => 'success',
                 'code' => 200
             );
@@ -168,10 +166,10 @@ class AuditPlanningController extends Controller
      */
     public function destroy($id, Request $request)
     {
-        $planning = AuditPlanning::find($id);
-        $planning->delete();
+        $procces = RisksProbabilityCalification::find($id);
+        $procces->delete();
         $data = array(
-                'planning' => $planning,
+                'probabilitycalification' => $procces,
                 'status' => 'success',
                 'code' => 200
             );

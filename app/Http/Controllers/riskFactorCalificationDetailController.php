@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\audit;
+namespace App\Http\Controllers;
 
-use App\AuditProgram;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\riskCalificationDetail;
+use Illuminate\Support\Facades\DB;
 
-class AuditProgramController extends Controller
+
+class riskFactorCalificationDetailController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,12 +17,55 @@ class AuditProgramController extends Controller
      */
     public function index()
     {
-        $programs = AuditProgram::Where('is_delete', '0')->get();
+
+
+        $califications = riskCalificationDetail::
+            join('risks_factor_calification', 'risk_factor_calification_in.id_calification', '=', 'risks_factor_calification.id_calification')
+            ->join('risks_factor', 'risk_factor_calification_in.id_factor', '=', 'risks_factor.id_factor')
+            ->select('risk_factor_calification_in.*','risks_factor_calification.*', 'risks_factor.*')
+            ->distinct('risk_factor.NAME')
+            ->get();
+
+
+
         return response()->json(array(
-                'programs'=> $programs,
+                'califications'=> $califications,
                 'status'=>'success'
                 ), 200);
     }
+
+    PUBLIC FUNCTION getAvgByFactor($id, Request $request){
+
+          $valor =  riskCalificationDetail::where( 'id_factor', $id )
+	       ->groupBy( 'id_factor' )
+	         ->select( 'id_factor', DB::raw( ' ROUND(AVG(valor)) promedio' ) ) //round
+	           ->get();
+
+             return response()->json(array(
+                     'avg'=> $valor,
+                     'status'=>'success'
+                     ), 200);
+    }
+
+    public function califications(){
+
+        $valores = riskCalificationDetail::
+            join('risks_factor_calification', 'risk_factor_calification_in.id_calification', '=', 'risks_factor_calification.id_calification')
+            ->join('risks_factor', 'risk_factor_calification_in.id_factor', '=', 'risks_factor.id_factor')
+            ->select('risk_factor_calification_in.valor','risks_factor_calification.id_user')
+            ->distinct('risk_factor_calification_in.id_factor')
+            ->get();
+
+           // $users = DB::table('users')->distinct()->get();
+
+        return response()->json(array(
+                'valores'=> $valores,
+                'status'=>'success'
+                ), 200);
+
+
+       }
+
 
     /**
      * Show the form for creating a new resource.
@@ -44,37 +89,26 @@ class AuditProgramController extends Controller
         $json =  $request->input('json', null);
         $param = json_decode($json);
         $param_array = json_decode($json, true);
-        //var_dump($param_array);
         //
-        $program = new AuditProgram();
+        $calification = new riskCalificationDetail();
         $request->merge($param_array);
-        $validatedData = \Validator::make($param_array, [ 
-                    'BEGIN' => 'required',
-                    'END' => 'required',
-                    'OBJECTIVES' => 'required',
-                    'SCOPE' => 'required',
-                    'RESPONSABILITIES' => 'required',                    
-                    'RESOURCES' => 'required',
-                    'OBSERVATION' => 'required'
-        ]);        
+        $validatedData = \Validator::make($param_array, [
+                    'id_calification' => 'required',
+                    'id_factor' => 'required',
+                    'valor' => 'required'
+
+        ]);
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
-            $program->BEGIN = $param->BEGIN;
-            $program->END = $param->END;
-            $program->OBJECTIVES = $param->OBJECTIVES;
-            $program->SCOPE = $param->SCOPE;
-            $program->RESPONSABILITIES = $param->RESPONSABILITIES;
-            $program->APPROVED = $param->APPROVED;
-            $program->RESOURCES = $param->RESOURCES;
-            $program->OBSERVATION = $param->OBSERVATION;
-            $program->ENABLE = $param->ENABLE;
-            $program->IS_DELETE = $param->IS_DELETE;  
-            $program->save();
+            $calification->id_calification = $param->id_calification;
+            $calification->id_factor = $param->id_factor;
+            $calification->valor = $param->valor;
+            $calification->save();
 
             $data = array(
-                'program' => $program,
+                'calification' => $calification,
                 'status' => 'success',
                 'code' => 200
             );
@@ -90,10 +124,10 @@ class AuditProgramController extends Controller
      */
     public function show($id)
     {
-        $program = AuditProgram::find($id);
-        if($program != null){
+        $calification = riskCalificationDetail::find($id);
+        if($calification != null){
                 return response()->json(array(
-                        'program'=> $program,
+                        'calification'=> $calification,
                         'status'=>'success'
                         ), 200);
         }else{
@@ -124,30 +158,23 @@ class AuditProgramController extends Controller
     public function update($id, Request $request)
     {
         $json =  $request->input('json', null);
-        
+
         $param = json_decode($json);
         $param_array = json_decode($json, true);//Convierte en array
-        $validatedData = \Validator::make($param_array, [ 
-                    'BEGIN' => 'required',
-                    'END' => 'required',
-                    'OBJECTIVES' => 'required',
-                    'SCOPE' => 'required',
-                    'RESPOSABILITIES' => 'required',                    
-                    'APPROVED' => 'required|in:0,1',
-                    'RESOURCES' => 'required',
-                    'OBSERVATION' => 'required'
-                   // 'enable' => 'required|in:0,1',
-                    //'delete' => 'required|in:0,1'
-        ]);        
+        $validatedData = \Validator::make($param_array, [
+            'id_calification' => 'required',
+            'id_factor' => 'required',
+            'valor' => 'required'
+        ]);
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
 
-        $program = AuditProgram::where('id', $id)->update($param_array);
+        $asignation = riskCalificationDetail::where('id_calification_in', $id)->update($param_array);
 
         $data = array(
-                'program' => $param,
+                'calification' => $param,
                 'status' => 'success',
                 'code' => 200
             );
@@ -164,20 +191,10 @@ class AuditProgramController extends Controller
      */
     public function destroy($id, Request $request)
     {
-        /*$program = AuditProgram::find($id);
-        $program->delete();
-        $data = array(
-                'program' => $program,
-                'status' => 'success',
-                'code' => 200
-            );
 
-        return response()->json($data, 200);*/
-        
-        $program1 = AuditProgram::where('id', $id)->update(array('is_delete'=>'1'));
-        $program = AuditProgram::find($id);
+        $program = riskCalificationDetail::find($id);
         $data = array(
-                'program' => $program,
+                'calification' => $program,
                 'status' => 'success',
                 'code' => 200
             );

@@ -1,36 +1,42 @@
 <?php
 
-namespace App\Http\Controllers\audit;
+namespace App\Http\Controllers;
 
-use App\AuditPlanning;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\RiskEffects;
 
-class AuditPlanningController extends Controller
+class RiskEffectsController extends Controller
 {
-    /**
+   /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
+    
     public function index()
     {
-        $plannings = AuditPlanning::All();
+        $riskeffects = RiskEffects::All();
         return response()->json(array(
-                'plannings'=> $plannings,
-                'status'=>'success'
-                ), 200);
+            'effects' => $riskeffects,
+            'status' => 'success'
+        ),200);
     }
 
-    /**
-    * Show the lists of activities associated to Audit
-    */
-    public function indexAudit($id_audit)
-    {
+   
 
-        $plannings = AuditPlanning::where('id_audit', $id_audit)->orderBy('id_area', 'cycle')->with('AuditAreas')->get();        
+
+    public function indexSearch(Request $request)
+    {
+        //Recoger datos post
+        $json =  $request->input('json', null);
+        $param = json_decode($json);
+        $param_array = json_decode($json, true);
+
+        $riskseffects = RiskEffects::where($param_array)->get();
         return response()->json(array(
-                'plannings'=> $plannings,
+                'riskeffect'=> $riskseffects,
                 'status'=>'success'
                 ), 200);
     }
@@ -58,32 +64,23 @@ class AuditPlanningController extends Controller
         $param = json_decode($json);
         $param_array = json_decode($json, true);
         //
-        $planning = new AuditPlanning();
+        $effects = new RiskEffects();
         $request->merge($param_array);
         $validatedData = \Validator::make($param_array, [ 
-                    'ID_AUDIT' => 'required',
-                    'ID_AREA' => 'required',
-                    'CYCLE' => 'required|in:P,H,V,A',
-                    'QUESTION' => 'required'                    
+                    'name' => 'required',
+                    
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
-            $planning->id_audit = $param->ID_AUDIT;
-            $planning->id_area = $param->ID_AREA;
-            $planning->cycle = $param->CYCLE;
-            $planning->question = $param->QUESTION;
-            $planning->numerals_iso = $param->NUMERALS_ISO;
-            $planning->numerals_meci = $param->NUMERALS_MECI;
-            $planning->records = $param->RECORDS;
-            $planning->observation = $param->OBSERVATION;
-            $planning->accordance = $param->ACCORDANCE;
-            $planning->action = $param->ACTION;
-            $planning->save();
+
+            $effects->name = $param->name;
+               
+            $effects->save();
 
             $data = array(
-                'planning' => $planning,
+                'effects' => $effects,
                 'status' => 'success',
                 'code' => 200
             );
@@ -94,31 +91,31 @@ class AuditPlanningController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  \App\RisksFactor  $risksFactor
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $planning = AuditPlanning::find($id);
-        if($planning != null){
+        $efect = RiskEffects::find($id);
+        if($efect != null){
                 return response()->json(array(
-                        'planning'=> $planning,
+                        'efect'=> $efect,
                         'status'=>'success'
                         ), 200);
         }else{
             return response()->json(array(
                         'status'=>'error'
                         ), 200);
-        }  
+        }    
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\AuditPlanning  $auditPlanning
+     * @param  \App\RisksEffects  $risksEffects
      * @return \Illuminate\Http\Response
      */
-    public function edit(AuditPlanning $auditPlanning)
+    public function edit(RisksFactor $risksFactor)
     {
         //
     }
@@ -126,32 +123,31 @@ class AuditPlanningController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  int $id
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\RisksEffects  $risksEffects
      * @return \Illuminate\Http\Response
      */
     public function update($id, Request $request)
     {
-        $json =  $request->input('json', null);        
-
-        $param = json_decode($json);        
+        $json =  $request->input('json', null);
+        
+        $param = json_decode($json);
         $param_array = json_decode($json, true);//Convierte en array
-        unset($param_array['audit_areas']);
-        $validatedData = \Validator::make($param_array, [
-                    'ID_AUDIT' => 'required', 
-                    'ID_AREA' => 'required',
-                    'CYCLE' => 'required|in:P,H,V,A',
-                    'QUESTION' => 'required'
+        //$request->merge($param_array);
+        //var_dump($param_array);
+        $validatedData = \Validator::make($param_array, [ 
+                    'name' => 'required',
+                   
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
 
-        $planning = AuditPlanning::where('id', $id)->update($param_array);
+        $efects = RisksEffects::where('id', $id)->update($param_array);
 
         $data = array(
-                'planning' => $param,
+                'efects' => $efects,
                 'status' => 'success',
                 'code' => 200
             );
@@ -162,16 +158,15 @@ class AuditPlanningController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\RisksEffects  $RisksEffects
      * @return \Illuminate\Http\Response
      */
     public function destroy($id, Request $request)
     {
-        $planning = AuditPlanning::find($id);
-        $planning->delete();
+        $efects = RisksEffects::find($id);
+        $efects->delete();
         $data = array(
-                'planning' => $planning,
+                'efects' => $efects,
                 'status' => 'success',
                 'code' => 200
             );

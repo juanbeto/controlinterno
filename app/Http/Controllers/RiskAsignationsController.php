@@ -1,36 +1,32 @@
 <?php
 
-namespace App\Http\Controllers\audit;
+namespace App\Http\Controllers;
 
-use App\AuditPlanning;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\risk_factor_asignation;
 
-class AuditPlanningController extends Controller
+class RiskAsignationsController extends Controller
 {
-    /**
+   /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $plannings = AuditPlanning::All();
-        return response()->json(array(
-                'plannings'=> $plannings,
-                'status'=>'success'
-                ), 200);
-    }
+        
+      
+        $asignations = risk_factor_asignation::
+            join('risks_process', 'risk_factor_asignation.id_proccess', '=', 'risks_process.id_proccess')
+            ->join('risks_factor', 'risk_factor_asignation.id_factor', '=', 'risks_factor.id_factor')
+            ->select('risks_process.*', 'risks_factor.*')
+            ->get();
 
-    /**
-    * Show the lists of activities associated to Audit
-    */
-    public function indexAudit($id_audit)
-    {
 
-        $plannings = AuditPlanning::where('id_audit', $id_audit)->orderBy('id_area', 'cycle')->with('AuditAreas')->get();        
+
         return response()->json(array(
-                'plannings'=> $plannings,
+                'asignations'=> $asignations,
                 'status'=>'success'
                 ), 200);
     }
@@ -58,32 +54,23 @@ class AuditPlanningController extends Controller
         $param = json_decode($json);
         $param_array = json_decode($json, true);
         //
-        $planning = new AuditPlanning();
+        $asignation = new risk_factor_asignation();
         $request->merge($param_array);
         $validatedData = \Validator::make($param_array, [ 
-                    'ID_AUDIT' => 'required',
-                    'ID_AREA' => 'required',
-                    'CYCLE' => 'required|in:P,H,V,A',
-                    'QUESTION' => 'required'                    
+                    'id_proccess' => 'required',
+                    'id_factor' => 'required',
+                   
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
-            $planning->id_audit = $param->ID_AUDIT;
-            $planning->id_area = $param->ID_AREA;
-            $planning->cycle = $param->CYCLE;
-            $planning->question = $param->QUESTION;
-            $planning->numerals_iso = $param->NUMERALS_ISO;
-            $planning->numerals_meci = $param->NUMERALS_MECI;
-            $planning->records = $param->RECORDS;
-            $planning->observation = $param->OBSERVATION;
-            $planning->accordance = $param->ACCORDANCE;
-            $planning->action = $param->ACTION;
-            $planning->save();
+            $asignation->id_proccess = $param->id_proccess;
+            $asignation->id_factor = $param->id_factor;
+            $asignation->save();
 
             $data = array(
-                'planning' => $planning,
+                'asignation' => $asignation,
                 'status' => 'success',
                 'code' => 200
             );
@@ -99,26 +86,26 @@ class AuditPlanningController extends Controller
      */
     public function show($id)
     {
-        $planning = AuditPlanning::find($id);
-        if($planning != null){
+        $asignation = risk_factor_asignation::find($id);
+        if($asignation != null){
                 return response()->json(array(
-                        'planning'=> $planning,
+                        'asignation'=> $asignation,
                         'status'=>'success'
                         ), 200);
         }else{
             return response()->json(array(
                         'status'=>'error'
                         ), 200);
-        }  
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\AuditPlanning  $auditPlanning
+     * @param  \App\AuditProgram  $auditProgram
      * @return \Illuminate\Http\Response
      */
-    public function edit(AuditPlanning $auditPlanning)
+    public function edit(AuditProgram $auditProgram)
     {
         //
     }
@@ -132,26 +119,23 @@ class AuditPlanningController extends Controller
      */
     public function update($id, Request $request)
     {
-        $json =  $request->input('json', null);        
-
-        $param = json_decode($json);        
+        $json =  $request->input('json', null);
+        
+        $param = json_decode($json);
         $param_array = json_decode($json, true);//Convierte en array
-        unset($param_array['audit_areas']);
-        $validatedData = \Validator::make($param_array, [
-                    'ID_AUDIT' => 'required', 
-                    'ID_AREA' => 'required',
-                    'CYCLE' => 'required|in:P,H,V,A',
-                    'QUESTION' => 'required'
+        $validatedData = \Validator::make($param_array, [ 
+            'id_proccess' => 'required',
+            'id_factor' => 'required',
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
 
-        $planning = AuditPlanning::where('id', $id)->update($param_array);
+        $asignation = risk_factor_asignation::where('id_asignation', $id)->update($param_array);
 
         $data = array(
-                'planning' => $param,
+                'asignation' => $param,
                 'status' => 'success',
                 'code' => 200
             );
@@ -168,10 +152,10 @@ class AuditPlanningController extends Controller
      */
     public function destroy($id, Request $request)
     {
-        $planning = AuditPlanning::find($id);
-        $planning->delete();
+       
+        $program = risk_factor_asignation::find($id);
         $data = array(
-                'planning' => $planning,
+                'asignation' => $program,
                 'status' => 'success',
                 'code' => 200
             );

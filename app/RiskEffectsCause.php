@@ -4,22 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * @property int $ID
- * @property int $ID_RISKS
- * @property string $CAUSES
- 
- * @property string $CREATEDATE
- * @property Risk $risk
- */
-class RisksCauseseffects extends Model
+class RiskEffectsCause extends Model
 {
     /**
      * The table associated with the model.
      * 
      * @var string
      */
-    protected $table = 'RISKS_CAUSESEFFECTS';
+    protected $table = 'risks_effectscause';
 
     /**
      * The primary key for the model.
@@ -31,7 +23,7 @@ class RisksCauseseffects extends Model
     /**
      * @var array
      */
-    protected $fillable = ['ID_RISKS', 'ID_FACTOR', 'CREATEDATE'];
+    protected $fillable = ['ID_RISKS', 'ID_EFFECTS'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -41,8 +33,8 @@ class RisksCauseseffects extends Model
         return $this->belongsTo('App\Risk', 'ID_RISKS', 'ID');
     }
 
-    public function causes()
+    public function effects()
     {
-        return $this->belongsTo('App\RiskFactor', 'ID_FACTOR', 'ID_FACTOR');
+        return $this->belongsTo('App\RiskEffects', 'ID_EFFECTS', 'ID_EFFECTS');
     }
 }

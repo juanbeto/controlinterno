@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\audit;
+namespace App\Http\Controllers;
 
-use App\AuditPlanning;
+use App\RisksPolitics;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class AuditPlanningController extends Controller
+class RisksPoliticsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,22 +14,23 @@ class AuditPlanningController extends Controller
      */
     public function index()
     {
-        $plannings = AuditPlanning::All();
+        $risks_politics = RisksPolitics::all();
         return response()->json(array(
-                'plannings'=> $plannings,
+                'risks_politics'=> $risks_politics,
                 'status'=>'success'
                 ), 200);
     }
 
+    
     /**
-    * Show the lists of activities associated to Audit
+    * Show the lists of actions associated to risks
     */
-    public function indexAudit($id_audit)
+    public function indexRisks($id_risks)
     {
 
-        $plannings = AuditPlanning::where('id_audit', $id_audit)->orderBy('id_area', 'cycle')->with('AuditAreas')->get();        
+        $risks_politics = RisksPolitics::where('id_risks', $id_risks)->get();
         return response()->json(array(
-                'plannings'=> $plannings,
+                'risks_politics'=> $risks_politics,
                 'status'=>'success'
                 ), 200);
     }
@@ -53,37 +53,28 @@ class AuditPlanningController extends Controller
      */
     public function store(Request $request)
     {
-        //Recoger datos post
+          //Recoger datos post
         $json =  $request->input('json', null);
         $param = json_decode($json);
         $param_array = json_decode($json, true);
         //
-        $planning = new AuditPlanning();
+        $risksPolitic = new RisksPolitics();
         $request->merge($param_array);
         $validatedData = \Validator::make($param_array, [ 
-                    'ID_AUDIT' => 'required',
-                    'ID_AREA' => 'required',
-                    'CYCLE' => 'required|in:P,H,V,A',
-                    'QUESTION' => 'required'                    
+                    'id_risks' => 'required',
+                    'description' => 'required|min:5',                    
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
-            $planning->id_audit = $param->ID_AUDIT;
-            $planning->id_area = $param->ID_AREA;
-            $planning->cycle = $param->CYCLE;
-            $planning->question = $param->QUESTION;
-            $planning->numerals_iso = $param->NUMERALS_ISO;
-            $planning->numerals_meci = $param->NUMERALS_MECI;
-            $planning->records = $param->RECORDS;
-            $planning->observation = $param->OBSERVATION;
-            $planning->accordance = $param->ACCORDANCE;
-            $planning->action = $param->ACTION;
-            $planning->save();
+
+            $risksPolitic->id_risks = $param->id_risks;
+            $risksPolitic->description = $param->description;
+            $risksPolitic->save();
 
             $data = array(
-                'planning' => $planning,
+                'risksPolitic' => $risksPolitic,
                 'status' => 'success',
                 'code' => 200
             );
@@ -94,31 +85,31 @@ class AuditPlanningController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  \App\RisksPolitics  $risksPolitics
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $planning = AuditPlanning::find($id);
-        if($planning != null){
+        $risks_politic = RisksPolitics::find($id);
+        if($risks_politic != null){
                 return response()->json(array(
-                        'planning'=> $planning,
+                        'risks_politic'=> $risks_politic,
                         'status'=>'success'
                         ), 200);
         }else{
             return response()->json(array(
                         'status'=>'error'
                         ), 200);
-        }  
+        }   
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\AuditPlanning  $auditPlanning
+     * @param  \App\RisksPolitics  $risksPolitics
      * @return \Illuminate\Http\Response
      */
-    public function edit(AuditPlanning $auditPlanning)
+    public function edit(RisksPolitics $risksPolitics)
     {
         //
     }
@@ -126,52 +117,48 @@ class AuditPlanningController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  int $id
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\RisksPolitics  $risksPolitics
      * @return \Illuminate\Http\Response
      */
     public function update($id, Request $request)
     {
         $json =  $request->input('json', null);        
-
-        $param = json_decode($json);        
+        $param = json_decode($json);
         $param_array = json_decode($json, true);//Convierte en array
-        unset($param_array['audit_areas']);
-        $validatedData = \Validator::make($param_array, [
-                    'ID_AUDIT' => 'required', 
-                    'ID_AREA' => 'required',
-                    'CYCLE' => 'required|in:P,H,V,A',
-                    'QUESTION' => 'required'
-        ]);        
+        $validatedData = \Validator::make($param_array, [ 
+                    'id_risks' => 'required',
+                    'description' => 'required|min:5',                    
+        ]);            
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
 
-        $planning = AuditPlanning::where('id', $id)->update($param_array);
+        $risks_politic = RisksPolitics::where('id', $id)->update($param_array);
 
         $data = array(
-                'planning' => $param,
+                'risks_politic' => $param,
                 'status' => 'success',
                 'code' => 200
             );
 
         return response()->json($data, 200);
     }
+    
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\RisksPolitics  $risksPolitics
      * @return \Illuminate\Http\Response
      */
     public function destroy($id, Request $request)
     {
-        $planning = AuditPlanning::find($id);
-        $planning->delete();
+        $risks_politic = RisksPolitics::find($id);
+        $risks_politic->delete();
         $data = array(
-                'planning' => $planning,
+                'risks_politic' => $risks_politic,
                 'status' => 'success',
                 'code' => 200
             );

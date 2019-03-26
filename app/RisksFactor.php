@@ -26,7 +26,7 @@ class RisksFactor extends Model
      * 
      * @var string
      */
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'ID_FACTOR';
 
     /**
      * @var array

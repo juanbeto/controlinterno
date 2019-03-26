@@ -1,24 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\risks;
+namespace App\Http\Controllers;
 
-use App\RisksFactor;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\risks\Controller;
+use App\risk_factor_asignation;
 
-class RisksFactorController extends Controller
+class RiskAsignationController extends Controller
 {
-    /**
+  /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-
-        $factors = RisksFactor::all()->load('RisksFactorType');
+        $asignations = risk_factor_asignation::All();
         return response()->json(array(
-                'factors'=> $factors,
+                'asignations'=> $asignations,
                 'status'=>'success'
                 ), 200);
     }
@@ -41,32 +40,30 @@ class RisksFactorController extends Controller
      */
     public function store(Request $request)
     {
-        //Recoger datos post
-        $json =  $request->input('json', null);
-        $param = json_decode($json);
-        $param_array = json_decode($json, true);
-        //
-        $factor = new RisksFactor();
-        $request->merge($param_array);
-        $validatedData = \Validator::make($param_array, [
-                    'name' => 'required',
-                    'id_factor_type' => 'required',
-                    'description' => 'required',
-                    'definition' => 'required'
-        ]);
+       //Recoger datos post
+       $json =  $request->input('json', null);
+       $param = json_decode($json);
+       $param_array = json_decode($json, true);
+       //
+       $asignation = new risk_factor_asignation();
+       $request->merge($param_array);
+       $validatedData = \Validator::make($param_array, [ 
+        'id_proccess' => 'required',
+        'id_factor' => 'required'
+              
+                   
+                   
+        ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
-
-            $factor->name = $param->name;
-            $factor->id_factor_type = $param->id_factor_type;
-            $factor->description = $param->description;
-            $factor->definition = $param->definition;
-            $factor->save();
+            $asignation->ID_PROCCESS = $param->id_proccess;
+            $asignation->ID_FACTOR = $param->id_factor;
+            $asignation->save();
 
             $data = array(
-                'factor' => $factor,
+                'asignation' => $asignation,
                 'status' => 'success',
                 'code' => 200
             );
@@ -77,15 +74,15 @@ class RisksFactorController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\RisksFactor  $risksFactor
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $factor = RisksFactor::find($id);
-        if($risfactorks != null){
+        $asignation = risk_factor_asignation::find($id);
+        if($asignation != null){
                 return response()->json(array(
-                        'factor'=> $factor,
+                        'asignation'=> $asignation,
                         'status'=>'success'
                         ), 200);
         }else{
@@ -98,10 +95,10 @@ class RisksFactorController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\RisksFactor  $risksFactor
+     * @param  \App\AuditProgram  $auditProgram
      * @return \Illuminate\Http\Response
      */
-    public function edit(RisksFactor $risksFactor)
+    public function edit(AuditProgram $auditProgram)
     {
         //
     }
@@ -109,33 +106,29 @@ class RisksFactorController extends Controller
     /**
      * Update the specified resource in storage.
      *
+     * @param  int $id
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\RisksFactor  $risksFactor
      * @return \Illuminate\Http\Response
      */
     public function update($id, Request $request)
     {
         $json =  $request->input('json', null);
-
+        
         $param = json_decode($json);
         $param_array = json_decode($json, true);//Convierte en array
-        //$request->merge($param_array);
-        //var_dump($param_array);
-        $validatedData = \Validator::make($param_array, [
-                    'name' => 'required',
-                    'id_factor_type' => 'required',
-                    'description' => 'required',
-                    'definition' => 'required'
-        ]);
+        $validatedData = \Validator::make($param_array, [ 
+            'id_proccess' => 'required',
+            'id_factor' => 'required',
+        ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
 
-        $factor = RisksFactor::where('id', $id)->update($param_array);
+        $asignation = risk_factor_asignation::where('id_asignation', $id)->update($param_array);
 
         $data = array(
-                'factor' => $param,
+                'asignation' => $param,
                 'status' => 'success',
                 'code' => 200
             );
@@ -146,15 +139,16 @@ class RisksFactorController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\RisksFactor  $risksFactor
+     * @param  int $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function destroy($id, Request $request)
     {
-        $factor = RisksFactor::find($id);
-        $factor->delete();
+       
+        $program = risk_factor_asignation::find($id);
         $data = array(
-                'factor' => $factor,
+                'asignation' => $program,
                 'status' => 'success',
                 'code' => 200
             );

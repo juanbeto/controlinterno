@@ -6,15 +6,20 @@ use App\Audit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Helpers\JwtAuth;
+
+
 class AuditController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      * @param  int $id_program
      * @return \Illuminate\Http\Response
      */
-    public function index($id_program)
+    public function index($id_program, Request $request)
     {
+        $this->verifiqueAuth($request);
         $audits = Audit::where('id_program', $id_program)->get();
         return response()->json(array(
                 'audits'=> $audits,
@@ -67,43 +72,43 @@ class AuditController extends Controller
         $audit = new Audit();
         $request->merge($param_array);
         $validatedData = \Validator::make($param_array, [ 
-                    'id_program' => 'required',
-                    'name' => 'required|min:5',
-                    'objective' => 'required',
-                    'id_user_manager' => 'required',
-                    'id_user_responsible' => 'required',                    
-                    'date_begin' => 'required',
-                    'date_end' => 'required',
-                    'scope' => 'required',
-                    'name_process' => 'required',
-                    'criteria' => 'required',
-                    'observations' => 'required',
-                    'approved' => 'required',
-                    'global' => 'required',
-                    'numerals' => 'required',
-                    'meci' => 'required',
-                    'closed' => 'required'                    
+                    'ID_PROGRAM' => 'required',
+                    'NAME' => 'required|min:5',
+                    'OBJECTIVE' => 'required',
+                    //'ID_USER_MANAGER' => 'required',
+                    //'ID_USER_RESPONSIBLE' => 'required',                    
+                    'DATE_BEGIN' => 'required',
+                    'DATE_END' => 'required',
+                    'SCOPE' => 'required',
+                    'NAME_PROCESS' => 'required',
+                    'CRITERIA' => 'required',
+                    'OBSERVATIONS' => 'required'
+                    //'APPROVED' => 'required',
+                    //'GLOBAL' => 'required',
+                    //'NUMERALS' => 'required',
+                    //'MECI' => 'required',
+                    //'CLOSED' => 'required'                    
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
-            $audit->id_program = $param->id_program;
-            $audit->name = $param->name;
-            $audit->objective = $param->numerobjectiveals_iso;
-            $audit->id_user_manager = $param->id_user_manager;
-            $audit->id_user_responsible = $param->id_user_responsible;
-            $audit->date_begin = $param->date_begin;
-            $audit->date_end = $param->date_end;
-            $audit->scope = $param->scope;
-            $audit->name_process = $param->name_process;
-            $audit->criteria = $param->criteria;
-            $audit->observations = $param->observations;
-            $audit->approved = $param->approved;
-            $audit->global = $param->global;
-            $audit->numerals = $param->numerals;
-            $audit->meci = $param->meci;
-            $audit->closed = $param->closed;
+            $audit->id_program = $param->ID_PROGRAM;
+            $audit->name = $param->NAME;
+            $audit->objective = $param->OBJECTIVE;
+            $audit->id_user_manager = $param->ID_USER_MANAGER;
+            $audit->id_user_responsible = $param->ID_USER_RESPONSIBLE;
+            $audit->date_begin = $param->DATE_BEGIN;
+            $audit->date_end = $param->DATE_END;
+            $audit->scope = $param->SCOPE;
+            $audit->name_process = $param->NAME_PROCESS;
+            $audit->criteria = $param->CRITERIA;
+            $audit->observations = $param->OBSERVATIONS;
+            $audit->approved = $param->APPROVED;
+            $audit->global = $param->GLOBAL;
+            $audit->numerals = $param->NUMERALS;
+            $audit->meci = $param->MECI;
+            $audit->closed = $param->CLOSED;
 
             $audit->save();
 
@@ -122,19 +127,27 @@ class AuditController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
-        $audit = Audit::find($id);
-        if($audit != null){
+        $vali = $this->verifiqueAuth($request);
+        if($vali){
+            $audit = Audit::find($id);
+            if($audit != null){
+                    return response()->json(array(
+                            'audit'=> $audit,
+                            'status'=>'success'
+                            ), 200);
+            }else{
                 return response()->json(array(
-                        'audit'=> $audit,
-                        'status'=>'success'
-                        ), 200);
+                            'status'=>'error'
+                            ), 200);
+            }  
         }else{
             return response()->json(array(
-                        'status'=>'error'
-                        ), 200);
-        }  
+                            'status'=>'error_authorization',
+                            'message'=>'error Authorization'
+                            ), 200);
+        }
     }
 
     /**
@@ -162,22 +175,22 @@ class AuditController extends Controller
         $param = json_decode($json);
         $param_array = json_decode($json, true);//Convierte en array
         $validatedData = \Validator::make($param_array, [ 
-                    'id_program' => 'required',
-                    'name' => 'required|min:5',
-                    'objective' => 'required',
-                    'id_user_manager' => 'required',
-                    'id_user_responsible' => 'required',                    
-                    'date_begin' => 'required',
-                    'date_end' => 'required',
-                    'scope' => 'required',
-                    'name_process' => 'required',
-                    'criteria' => 'required',
-                    'observations' => 'required',
-                    'approved' => 'required',
-                    'global' => 'required',
-                    'numerals' => 'required',
-                    'meci' => 'required',
-                    'closed' => 'required'
+                    'ID_PROGRAM' => 'required',
+                    'NAME' => 'required|min:5',
+                    'OBJECTIVE' => 'required',
+                    //'ID_USER_MANAGER' => 'required',
+                    //'ID_USER_RESPONSIBLE' => 'required',                    
+                    'DATE_BEGIN' => 'required',
+                    'DATE_END' => 'required',
+                    'SCOPE' => 'required',
+                    'NAME_PROCESS' => 'required',
+                    'CRITERIA' => 'required',
+                    'OBSERVATIONS' => 'required'
+                    //'APPROVED' => 'required',
+                    //'GLOBAL' => 'required',
+                    //'NUMERALS' => 'required',
+                    //'MECI' => 'required',
+                    //'CLOSED' => 'required'   
         ]);        
 
         if($validatedData->fails()){

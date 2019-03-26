@@ -20,14 +20,14 @@ class RisksProcess extends Model
      * 
      * @var string
      */
-    protected $table = 'RISKS_PROCESS';
+    protected $table = 'risks_process'; 
 
     /**
      * The primary key for the model.
      * 
      * @var string
      */
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'ID_PROCCESS';
 
     /**
      * @var array

@@ -1,41 +1,43 @@
 <?php
 
-namespace App\Http\Controllers\audit;
+namespace App\Http\Controllers;
 
-use App\AuditPlanning;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\RiskEffectsCause;
 
-class AuditPlanningController extends Controller
+class RiskEffectsCauseController extends Controller
 {
-    /**
+    
+
+
+
+ /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $plannings = AuditPlanning::All();
+        
+      
+        $riskEffectsCause = RiskEffectsCause::
+            join('risks', 'risks.id', '=', 'risks_effectscause.id_risks')
+            ->join('risks_effects', 'risks_effects.id_effects', '=', 'risks_effectscause.id_effects')
+            ->select('risks_effectscause.*','risks.id','risks_effects.*')
+            ->get();
+
+           
+
         return response()->json(array(
-                'plannings'=> $plannings,
+                'riskEffectsCause'=> $riskEffectsCause,
                 'status'=>'success'
                 ), 200);
     }
 
-    /**
-    * Show the lists of activities associated to Audit
-    */
-    public function indexAudit($id_audit)
-    {
 
-        $plannings = AuditPlanning::where('id_audit', $id_audit)->orderBy('id_area', 'cycle')->with('AuditAreas')->get();        
-        return response()->json(array(
-                'plannings'=> $plannings,
-                'status'=>'success'
-                ), 200);
-    }
 
-    /**
+       /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -58,32 +60,24 @@ class AuditPlanningController extends Controller
         $param = json_decode($json);
         $param_array = json_decode($json, true);
         //
-        $planning = new AuditPlanning();
+        $riskeffectcause = new RiskEffectsCause();
         $request->merge($param_array);
         $validatedData = \Validator::make($param_array, [ 
-                    'ID_AUDIT' => 'required',
-                    'ID_AREA' => 'required',
-                    'CYCLE' => 'required|in:P,H,V,A',
-                    'QUESTION' => 'required'                    
+                    'id_risks' => 'required',
+                    'id_effects' => 'required'
+                    
+                   
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
-            $planning->id_audit = $param->ID_AUDIT;
-            $planning->id_area = $param->ID_AREA;
-            $planning->cycle = $param->CYCLE;
-            $planning->question = $param->QUESTION;
-            $planning->numerals_iso = $param->NUMERALS_ISO;
-            $planning->numerals_meci = $param->NUMERALS_MECI;
-            $planning->records = $param->RECORDS;
-            $planning->observation = $param->OBSERVATION;
-            $planning->accordance = $param->ACCORDANCE;
-            $planning->action = $param->ACTION;
-            $planning->save();
+            $riskeffectcause->id_risks = $param->id_risks;
+            $riskeffectcause->id_effects = $param->id_effects;
+            $riskeffectcause->save();
 
             $data = array(
-                'planning' => $planning,
+                'riskeffectcause' => $riskeffectcause,
                 'status' => 'success',
                 'code' => 200
             );
@@ -99,26 +93,26 @@ class AuditPlanningController extends Controller
      */
     public function show($id)
     {
-        $planning = AuditPlanning::find($id);
-        if($planning != null){
+        $riskeffectcause = RiskEffectsCause::find($id);
+        if($riskeffectcause != null){
                 return response()->json(array(
-                        'planning'=> $planning,
+                        'riskeffectcause'=> $riskeffectcause,
                         'status'=>'success'
                         ), 200);
         }else{
             return response()->json(array(
                         'status'=>'error'
                         ), 200);
-        }  
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\AuditPlanning  $auditPlanning
+     * @param  \App\AuditProgram  $auditProgram
      * @return \Illuminate\Http\Response
      */
-    public function edit(AuditPlanning $auditPlanning)
+    public function edit(AuditProgram $auditProgram)
     {
         //
     }
@@ -132,26 +126,23 @@ class AuditPlanningController extends Controller
      */
     public function update($id, Request $request)
     {
-        $json =  $request->input('json', null);        
-
-        $param = json_decode($json);        
+        $json =  $request->input('json', null);
+        
+        $param = json_decode($json);
         $param_array = json_decode($json, true);//Convierte en array
-        unset($param_array['audit_areas']);
-        $validatedData = \Validator::make($param_array, [
-                    'ID_AUDIT' => 'required', 
-                    'ID_AREA' => 'required',
-                    'CYCLE' => 'required|in:P,H,V,A',
-                    'QUESTION' => 'required'
+        $validatedData = \Validator::make($param_array, [ 
+            'id_risks' => 'required',
+            'id_effects' => 'required',
         ]);        
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
 
-        $planning = AuditPlanning::where('id', $id)->update($param_array);
+        $asignation = RiskEffectsCause::where('id', $id)->update($param_array);
 
         $data = array(
-                'planning' => $param,
+                'riskeffectcause' => $asignation,
                 'status' => 'success',
                 'code' => 200
             );
@@ -168,10 +159,10 @@ class AuditPlanningController extends Controller
      */
     public function destroy($id, Request $request)
     {
-        $planning = AuditPlanning::find($id);
-        $planning->delete();
+       
+        $program = RiskEffectsCause::find($id);
         $data = array(
-                'planning' => $planning,
+                'riskeffectcause' => $program,
                 'status' => 'success',
                 'code' => 200
             );

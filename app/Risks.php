@@ -30,6 +30,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Risks extends Model
 {
+
+    protected $table = 'RISKS';
     /**
      * The primary key for the model.
      * 
@@ -42,7 +44,7 @@ class Risks extends Model
     /**
      * @var array
      */
-    protected $fillable = ['CODE', 'ID_PROCESS', 'ID_PERIOD', 'NAME', 'DESCRIPTION', 'EFFECTS', 'CAUSES', 'CLASSIFICATION', 'OBJECT', 'FACTOR', 'FACTORVULNERABILITY', 'PROBABILITY', 'CREATEDBY', 'CREATEDATE'];
+    protected $fillable = ['CODE', 'ID_PROCESS','NAME', 'DESCRIPTION', 'ACTIVO', 'AMENAZA', 'TYPE', 'CREATEDBY', 'CREATEDATE'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
