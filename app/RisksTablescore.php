@@ -11,6 +11,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $NAME_GROUP
  * @property int $FRECUENCY
  * @property int $IMPACT
+ * @property string $CREATED_AT
+ * @property string $UPDATED_AT
+ * @property int $CREATED_BY
+ * @property int $UPDATED_BY
  * @property Risk $risk
  * @property RisksScore $risksScore
  */
@@ -33,7 +37,7 @@ class RisksTablescore extends Model
     /**
      * @var array
      */
-    protected $fillable = ['ID_RISKS', 'ID_SCORE', 'NAME_GROUP', 'FRECUENCY', 'IMPACT'];
+    protected $fillable = ['ID_RISKS', 'ID_SCORE', 'NAME_GROUP', 'FRECUENCY', 'IMPACT', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

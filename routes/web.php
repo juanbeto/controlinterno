@@ -82,6 +82,9 @@ Route::put('/api/risks/risks/{id}','risks\RisksController@update');
 Route::resource('/api/risks/actions','risks\RisksActionController');
 Route::get('/api/risks/actions/{id_risks}/risk','risks\RisksActionController@indexRisks');
 
+Route::resource('/api/risks/controls','risks\RisksControlController');
+Route::get('/api/risks/actions/{id_risks}/risk','risks\RisksControlController@indexRisks');
+
 Route::resource('/api/risks/causeseffects','RisksCauseseffectsController');
 Route::get('/api/risks/causeseffects/{id_risks}/risk','RisksCauseseffectsController@indexRisks');
 
@@ -156,9 +159,11 @@ Route::resource('/api/audit/question','audit\AuditQuestionController')->middlewa
 
 //Route::resource('/api/Admin/user','Admin\UserController');
 Route::post('/api/Admin/user/login','Admin\UserController@login');
+
 Route::get('/api/Admin/user/login','Admin\UserController@login');
 
 Route::resource('/api/Admin/user','Admin\UserController');
+
 
 
 Route::get('/clear-cache', function(){

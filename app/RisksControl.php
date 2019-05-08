@@ -12,6 +12,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $DOCUMENT
  * @property int $IS_APPLIED
  * @property int $IS_EFFECTIVE
+ * @property string $CREATED_AT
+ * @property string $UPDATED_AT
+ * @property int $CREATED_BY
+ * @property int $UPDATED_BY
  * @property RisksControlType $risksControlType
  * @property Risk $risk
  */
@@ -34,7 +38,7 @@ class RisksControl extends Model
     /**
      * @var array
      */
-    protected $fillable = ['ID_RISKS', 'ID_CONTROL_TYPE', 'NAME', 'DOCUMENT', 'IS_APPLIED', 'IS_EFFECTIVE'];
+    protected $fillable = ['ID_RISKS', 'ID_CONTROL_TYPE', 'NAME', 'DOCUMENT', 'IS_APPLIED', 'IS_EFFECTIVE', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

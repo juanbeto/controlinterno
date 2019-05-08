@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $ID_TABLESCORE
  * @property int $ID_VULNERABILITY
  * @property int $ID_IMPACT
+ * @property string $CREATED_AT
+ * @property string $UPDATED_AT
+ * @property int $CREATED_BY
+ * @property int $UPDATED_BY
  * @property RisksTablescore $risksTablescore
  * @property RisksVulnerability $risksVulnerability
  * @property RisksImpact $risksImpact
@@ -32,7 +36,7 @@ class RisksCoreFact_vul extends Model
     /**
      * @var array
      */
-    protected $fillable = ['ID_TABLESCORE', 'ID_VULNERABILITY', 'ID_IMPACT'];
+    protected $fillable = ['ID_TABLESCORE', 'ID_VULNERABILITY', 'ID_IMPACT', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

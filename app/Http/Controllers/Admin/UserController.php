@@ -40,6 +40,7 @@ class UserController extends Controller
 		return response()->json($signup, 200);
     }
 
+
     public function index(Request $request)
     {
         //$this->verifiqueAuth($request);

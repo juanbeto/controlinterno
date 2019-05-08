@@ -39,7 +39,7 @@ class RisksFactorController extends Controller
         $param = json_decode($json);
         $param_array = json_decode($json, true);
 
-        $risksfactor = RisksFactor::where($param_array)->get();
+        $factors = RisksFactor::all()->load('RisksFactorType');
         return response()->json(array(
                 'audits'=> $risksfactor,
                 'status'=>'success'
@@ -71,12 +71,12 @@ class RisksFactorController extends Controller
         //
         $factor = new RisksFactor();
         $request->merge($param_array);
-        $validatedData = \Validator::make($param_array, [ 
+        $validatedData = \Validator::make($param_array, [
                     'name' => 'required',
                     'id_factor_type' => 'required',
                     'description' => 'required',
                     'definition' => 'required'
-        ]);        
+        ]);
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
@@ -84,8 +84,8 @@ class RisksFactorController extends Controller
 
             $factor->name = $param->name;
             $factor->id_factor_type = $param->id_factor_type;
-            $factor->description = $param->description;            
-            $factor->definition = $param->definition;          
+            $factor->description = $param->description;
+            $factor->definition = $param->definition;
             $factor->save();
 
             $data = array(
@@ -107,6 +107,7 @@ class RisksFactorController extends Controller
     {
         $factor = RisksFactor::find($id);
         if($factor != null){
+
                 return response()->json(array(
                         'factor'=> $factor,
                         'status'=>'success'
@@ -115,7 +116,7 @@ class RisksFactorController extends Controller
             return response()->json(array(
                         'status'=>'error'
                         ), 200);
-        }    
+        }
     }
 
     /**
@@ -139,17 +140,17 @@ class RisksFactorController extends Controller
     public function update($id, Request $request)
     {
         $json =  $request->input('json', null);
-        
+
         $param = json_decode($json);
         $param_array = json_decode($json, true);//Convierte en array
         //$request->merge($param_array);
         //var_dump($param_array);
-        $validatedData = \Validator::make($param_array, [ 
+        $validatedData = \Validator::make($param_array, [
                     'name' => 'required',
                     'id_factor_type' => 'required',
                     'description' => 'required',
                     'definition' => 'required'
-        ]);        
+        ]);
 
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);

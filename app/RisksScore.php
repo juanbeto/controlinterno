@@ -14,6 +14,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $AREA_DESC
  * @property string $VALUATION
  * @property string $DESCRIPTION
+ * @property string $CREATED_AT
+ * @property string $UPDATED_AT
+ * @property int $CREATED_BY
+ * @property int $UPDATED_BY
  * @property Risk $risk
  */
 class RisksScore extends Model
@@ -35,7 +39,7 @@ class RisksScore extends Model
     /**
      * @var array
      */
-    protected $fillable = ['ID_RISKS', 'FRECUENCY', 'IMPACT', 'SCORE', 'AREA', 'AREA_DESC', 'VALUATION', 'DESCRIPTION'];
+    protected $fillable = ['ID_RISKS', 'FRECUENCY', 'IMPACT', 'SCORE', 'AREA', 'AREA_DESC', 'VALUATION', 'DESCRIPTION', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
