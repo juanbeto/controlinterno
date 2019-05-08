@@ -9,7 +9,7 @@ class riskFactorCalificationDetail extends Model
     //
     protected $table = 'RISK_FACTOR_CALIFICATION_IN';
 
-    protected $primaryKey = 'ID_CALIFICATION_IN';
+    protected $primaryKey = 'ID';
 
     protected $fillable = [ 'ID_CALIFICATION', 'ID_FACTOR','VALOR'];
 

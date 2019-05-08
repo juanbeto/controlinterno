@@ -75,7 +75,7 @@ Route::put('/api/risks/factor/{id}','risks\RisksFactorController@update');
 Route::resource('/api/risks/factor','risks\RisksFactorController');
 
 Route::resource('/api/risks/risks','risks\RisksController');
-Route::put('/api/risks/risks/{id}','audit\RisksController@update');
+Route::put('/api/risks/risks/{id}','risks\RisksController@update');
 
 
 
@@ -158,6 +158,7 @@ Route::resource('/api/audit/question','audit\AuditQuestionController')->middlewa
 Route::post('/api/Admin/user/login','Admin\UserController@login');
 Route::get('/api/Admin/user/login','Admin\UserController@login');
 
+Route::resource('/api/Admin/user','Admin\UserController');
 
 
 Route::get('/clear-cache', function(){

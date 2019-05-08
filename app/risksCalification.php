@@ -11,7 +11,7 @@ class risksCalification extends Model
 
     protected $primaryKey = 'ID_CALIFICATION';
 
-    protected $fillable = [ 'ID_USER', 'DATE_CALIFICATION'];
+    protected $fillable = [ 'ID_USER', 'PROMEDIO','DATE_CALIFICATION'];
 
 
 

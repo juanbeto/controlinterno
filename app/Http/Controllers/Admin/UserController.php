@@ -39,4 +39,14 @@ class UserController extends Controller
 
 		return response()->json($signup, 200);
     }
+
+    public function index(Request $request)
+    {
+        //$this->verifiqueAuth($request);
+        $users = AdminUser::All();
+        return response()->json(array(
+                'users'=> $users,
+                'status'=>'success'
+                ), 200);
+    }
 }

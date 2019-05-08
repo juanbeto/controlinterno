@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\risks;
+namespace App\Http\Controllers;
 use Illuminate\Support\Facedes\DB;
 use App\RisksAction;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class RisksActionController extends Controller
 {

@@ -21,7 +21,15 @@ class RisksController extends Controller
                 'status'=>'success'
                 ), 200);
     }
+    public function RisksById($id_risks)
+    {
 
+        $risks_ID = Risks::where('ID', $id_risks)->get();
+        return response()->json(array(
+                'risks_ID'=> $risks_ID,
+                'status'=>'success'
+                ), 200);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -30,6 +38,10 @@ class RisksController extends Controller
     public function create()
     {
         //
+       
+
+
+
     }
 
     /**
@@ -56,7 +68,7 @@ class RisksController extends Controller
                     'effects' => 'required',
                     'causes' => 'required',
                     'classification' => 'required',
-                    //'object' => 'required',
+                    'object' => 'required',
                     'factor' => 'required',
                     'factorvulnerability' => 'required',
                     'probability' => 'required',
@@ -141,12 +153,12 @@ class RisksController extends Controller
                     'code' => 'required',
                     'id_process' => 'required',
                     'id_period' => 'required',
-                    'name' => 'required|min:5',
+                    'name' => 'required',
                     'description' => 'required',
                     'effects' => 'required',
                     'causes' => 'required',
                     'classification' => 'required',
-                    //'object' => 'required',
+                    'object' => 'required',
                     'factor' => 'required',
                     'factorvulnerability' => 'required',
                     'probability' => 'required',

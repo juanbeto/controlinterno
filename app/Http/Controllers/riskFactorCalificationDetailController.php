@@ -20,9 +20,9 @@ class riskFactorCalificationDetailController extends Controller
 
 
         $califications = riskCalificationDetail::
-            join('risks_factor_calification', 'risk_factor_calification_in.id_calification', '=', 'risks_factor_calification.id_calification')
-            ->join('risks_factor', 'risk_factor_calification_in.id_factor', '=', 'risks_factor.id_factor')
-            ->select('risk_factor_calification_in.*','risks_factor_calification.*', 'risks_factor.*')
+            join('risks_factor_calification', 'risk_factor_calification_detail.id', '=', 'risks_factor_calification.id_calification')
+            ->join('risks_factor', 'risk_factor_calification_calification.id', '=', 'risks_factor.id_factor')
+            ->select('risk_factor_calification_detail.*','risks_factor_calification.*', 'risks_factor.*')
             ->distinct('risk_factor.NAME')
             ->get();
 
@@ -50,10 +50,10 @@ class riskFactorCalificationDetailController extends Controller
     public function califications(){
 
         $valores = riskCalificationDetail::
-            join('risks_factor_calification', 'risk_factor_calification_in.id_calification', '=', 'risks_factor_calification.id_calification')
-            ->join('risks_factor', 'risk_factor_calification_in.id_factor', '=', 'risks_factor.id_factor')
-            ->select('risk_factor_calification_in.valor','risks_factor_calification.id_user')
-            ->distinct('risk_factor_calification_in.id_factor')
+            join('risks_factor_calification', 'risk_factor_calification_detail.id', '=', 'risks_factor_calification.id_calification')
+            ->join('risks_factor', 'risk_factor_calification_detail.id_factor', '=', 'risks_factor.id_factor')
+            ->select('risk_factor_calification_detail.valor','risks_factor_calification.id_user')
+            ->distinct('risk_factor_calification_detail.id_factor')
             ->get();
 
            // $users = DB::table('users')->distinct()->get();
