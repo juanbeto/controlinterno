@@ -68,8 +68,6 @@ class AuditController extends Controller
         $json =  $request->input('json', null);
         $param = json_decode($json);
         $param_array = json_decode($json, true);
-        //
-        die();
         $audit = new Audit();
         $request->merge($param_array);
         $validatedData = \Validator::make($param_array, [ 
