@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $ID
  * @property int $ID_PROGRAM
+ * @property int $PARENT_ID_AUDIT
  * @property string $NAME
  * @property string $OBJECTIVE
  * @property int $ID_USER_MANAGER
@@ -47,7 +48,7 @@ class Audit extends Model
     /**
      * @var array
      */
-    protected $fillable = ['ID_PROGRAM', 'NAME', 'OBJECTIVE', 'ID_USER_MANAGER', 'ID_USER_RESPONSIBLE', 'DATE_BEGIN', 'DATE_END', 'SCOPE', 'NAME_PROCESS', 'CRITERIA', 'OBSERVATIONS', 'APPROVED', 'GLOBAL', 'NUMERALS', 'MECI', 'CLOSED', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY'];
+    protected $fillable = ['ID_PROGRAM', 'PARENT_ID_AUDIT', 'NAME', 'OBJECTIVE', 'ID_USER_MANAGER', 'ID_USER_RESPONSIBLE', 'DATE_BEGIN', 'DATE_END', 'SCOPE', 'NAME_PROCESS', 'CRITERIA', 'OBSERVATIONS', 'APPROVED', 'GLOBAL', 'NUMERALS', 'MECI', 'CLOSED', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
