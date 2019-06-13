@@ -5,6 +5,7 @@ namespace App\Http\Controllers\audit;
 use App\AuditInform;
 use App\AuditPlanning;
 use App\AuditAreas;
+use App\Audit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -23,6 +24,7 @@ class AuditInformController extends Controller
         $informs = AuditInform::rightJoin
             ('audit', 'audit.id', '=', 'audit_inform.id_audit')
             ->select('audit.id AS ID_AUDIT', 'audit_inform.id AS ID_INFORM', 'audit.name')
+            ->whereNotNull('audit.ID_PROGRAM')
             ->get();
         return response()->json(array(
                 'informs_list'=> $informs,
@@ -186,9 +188,20 @@ class AuditInformController extends Controller
 
     public function getHallazgos($id, Request $request){
 
-        $am_area = AuditPlanning::join('audit_areas', 'audit_areas.id', '=', 'audit_planning.id_area')->select('audit_areas.name AS area', 'audit_areas.id AS id_area')->where('id_audit', $id)->where('ACCORDANCE', 'am')->distinct()->orderBy('ID_AREA')->get()->toArray();
-        $nc_area = AuditPlanning::join('audit_areas', 'audit_areas.id', '=', 'audit_planning.id_area')->select('audit_areas.name AS area', 'audit_areas.id AS id_area')->where('id_audit', $id)->where('ACCORDANCE', 'nc')->distinct()->orderBy('audit_areas.name')->get()->toArray();
-        $ar_area = AuditPlanning::join('audit_areas', 'audit_areas.id', '=', 'audit_planning.id_area')->select('audit_areas.name AS area', 'audit_areas.id AS id_area')->where('id_audit', $id)->where('ACCORDANCE', 'ar')->distinct()->orderBy('ID_AREA')->get()->toArray();
+        $audit = Audit::find($id);
+        if($audit->GLOBAL=="1"){
+            $audits = Audit::where('parent_id_audit', $id)->get();
+            foreach($audits as $auditmini){
+                $ids[] = $auditmini['ID'];
+            }
+        }else{
+            $ids[] = $id;
+        }
+
+
+        $am_area = AuditPlanning::join('audit_areas', 'audit_areas.id', '=', 'audit_planning.id_area')->select('audit_areas.name AS area', 'audit_areas.id AS id_area')->whereIn('id_audit', $ids)->where('ACCORDANCE', 'am')->distinct()->orderBy('ID_AREA')->get()->toArray();
+        $nc_area = AuditPlanning::join('audit_areas', 'audit_areas.id', '=', 'audit_planning.id_area')->select('audit_areas.name AS area', 'audit_areas.id AS id_area')->whereIn('id_audit', $ids)->where('ACCORDANCE', 'nc')->distinct()->orderBy('audit_areas.name')->get()->toArray();
+        $ar_area = AuditPlanning::join('audit_areas', 'audit_areas.id', '=', 'audit_planning.id_area')->select('audit_areas.name AS area', 'audit_areas.id AS id_area')->whereIn('id_audit', $ids)->where('ACCORDANCE', 'ar')->distinct()->orderBy('ID_AREA')->get()->toArray();
 
         $array_am_pregun = array();
         $array_nc_pregun = array();

@@ -82,10 +82,10 @@ class AuditController extends Controller
         $json =  $request->input('json', null);
         $param = json_decode($json);
         $param_array = json_decode($json, true);
+        //var_dump($param_array);
         $audit = new Audit();
         $request->merge($param_array);
         $validatedData = \Validator::make($param_array, [ 
-                    'ID_PROGRAM' => 'required',
                     'NAME' => 'required|min:5',
                     'OBJECTIVE' => 'required',
                     //'ID_USER_MANAGER' => 'required',
@@ -102,11 +102,12 @@ class AuditController extends Controller
                     //'MECI' => 'required',
                     //'CLOSED' => 'required'                    
         ]);        
-
+                
         if($validatedData->fails()){
             return response()->json($validatedData->errors(), 400);
         }
             $audit->id_program = $param->ID_PROGRAM;
+            $audit->parent_id_audit = $param->PARENT_ID_AUDIT;
             $audit->name = $param->NAME;
             $audit->objective = $param->OBJECTIVE;
             $audit->id_user_manager = $param->ID_USER_MANAGER;
@@ -122,7 +123,6 @@ class AuditController extends Controller
             $audit->numerals = $param->NUMERALS;
             $audit->meci = $param->MECI;
             $audit->closed = $param->CLOSED;
-
             $audit->save();
 
             $data = array(
@@ -142,7 +142,7 @@ class AuditController extends Controller
      */
     public function show($id, Request $request)
     {
-        $vali = $this->verifiqueAuth($request);
+        $vali = true;//$this->verifiqueAuth($request);
         if($vali){
             $audit = Audit::find($id);
             if($audit != null){
@@ -188,7 +188,6 @@ class AuditController extends Controller
         $param = json_decode($json);
         $param_array = json_decode($json, true);//Convierte en array
         $validatedData = \Validator::make($param_array, [ 
-                    'ID_PROGRAM' => 'required',
                     'NAME' => 'required|min:5',
                     'OBJECTIVE' => 'required',
                     //'ID_USER_MANAGER' => 'required',
@@ -230,7 +229,7 @@ class AuditController extends Controller
      */
     public function destroy($id, Request $request)
     {
-        $audit = Audit::find($id);
+        $audit = Audit::    find($id);
         $audit->delete();
         $data = array(
                 'audit' => $audit,
