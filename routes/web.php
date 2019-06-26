@@ -157,6 +157,25 @@ Route::resource('/api/audit/inform','audit\AuditInformController');
 
 Route::resource('/api/audit/question','audit\AuditQuestionController')->middleware('cors');
 
+//***********************************************************************//
+//***************List url's of the services of Planes********************//
+//***********************************************************************//
+Route::resource('/api/plan/activities','plan\ActivitiesController');
+
+Route::resource('/api/plan/advances','plan\ActivitiesAdvanceController');
+Route::get('/api/plan/advances/{id_activitie}/activitie','plan\ActivitiesAdvanceController@indexActivitie');
+
+Route::post('/api/plan/source','plan\SourceController@index');
+Route::get('/api/plan/source','plan\SourceController@index');
+Route::get('/api/plan/source/{id}','plan\SourceController@show');
+
+Route::post('/api/plan/process','plan\ProcessController@index');
+Route::get('/api/plan/process','plan\ProcessController@index');
+Route::get('/api/plan/process/{id}','plan\ProcessController@show');
+
+Route::post('/api/plan/dependence','plan\DependenceController@index');
+Route::get('/api/plan/dependence','plan\DependenceController@index');
+Route::get('/api/plan/dependence/{id}','plan\DependenceController@show');
 
 //Route::resource('/api/Admin/user','Admin\UserController');
 Route::post('/api/Admin/user/login','Admin\UserController@login');

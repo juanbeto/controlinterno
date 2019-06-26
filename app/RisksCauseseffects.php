@@ -35,11 +35,8 @@ class RisksCauseseffects extends Model
     /**
      * @var array
      */
-<<<<<<< HEAD
-    protected $fillable = ['ID_RISKS', 'ID_FACTOR', 'CREATEDATE'];
-=======
+
     protected $fillable = ['ID_RISKS', 'CAUSES', 'EFFECTS', 'CREATEDATE', 'CREATED_AT', 'UPDATED_AT', 'CREATED_BY', 'UPDATED_BY'];
->>>>>>> e27ae9a45b6fa000681c5cbc7c30ad8ee0790698
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
